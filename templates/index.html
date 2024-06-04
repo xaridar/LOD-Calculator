@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1 id="test" class="text-center">Welcome!</h1>
+<script>
+    $("#test").click((e) => {
+        console.log(e.button);
+    });
+</script>
+{% endblock %}
