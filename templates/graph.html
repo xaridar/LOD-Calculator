@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Graph - {{ name }}{% endblock %}
+{% block content %}
+<canvas id="chart" width="500" height="500"></canvas>
+<script>
+    const ctx = $('#chart')[0].getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels | safe }},
+            datasets: [
+                {
+                    label: 'Data',
+                    data: {{ values | safe }},
+                    fill: true,
+                    borderColor: 'rgb(178, 165, 10)',
+                },
+            ],
+        },
+        options: {
+            responsive: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        },
+    });
+</script>
+{% endblock %}
