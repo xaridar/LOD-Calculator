@@ -11,13 +11,16 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+def file_ok(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['csv']
+
 @app.route('/upload', methods=['POST'])
 def upload():
     if 'file' not in request.files:
         print('No file')
         return redirect('/')
     file = request.files['file']
-    if file.filename == '':
+    if file.filename == '' or not file_ok(file.filename):
         print('No file')
         return redirect('/')
     filename = secure_filename(file.filename)
