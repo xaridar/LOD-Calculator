@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request, flash, redirect
 from markupsafe import escape
 from werkzeug.utils import secure_filename
-import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
@@ -20,7 +19,7 @@ def upload():
         print('No file')
         return redirect('/')
     file = request.files['file']
-    if file.filename == '' or not file_ok(file.filename):
+    if file.filename == '' or file.filename is None or not file_ok(file.filename):
         print('No file')
         return redirect('/')
     filename = secure_filename(file.filename)

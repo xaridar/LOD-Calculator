@@ -24,7 +24,7 @@
                  {
                     label: 'Data',
                     data: {{ values | safe }},
-                    fill: false,
+                    fill: true,
                     borderColor: 'red',
                 },
                 {
@@ -50,12 +50,12 @@
             ],
         },
         options: {
-            responsive: false,
+            responsive: true,
             scales: {
                 y: {
                     beginAtZero: true
-                }
-            }
+                },
+            },
         },
     });
 </script>

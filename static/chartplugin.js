@@ -12,8 +12,4 @@ Chart.register({
             }
         }
     },
-    afterInit: (chart) => {
-        const data = chart.config.data;
-        console.log(data);
-    }
 })
