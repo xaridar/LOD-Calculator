@@ -12,15 +12,18 @@ def calc_lod(beta, k, u_micro, samples):
 
     cv_hat = sd_hat / mu_hat
     d = 1 / cv_hat**2
-    x_vals = np.arange(0, 50, 1)
+    x_vals = np.arange(0, 15, 1)
     
     print(n_exp, n_samples, cv_hat, mu_hat, d)
 
-    print(np.array([lod_function(x, d, mu_hat) for x in x_vals]))
-
     l_plate = (d / beta ** (1 / d)) - d
     l_original = l_plate / k
-    print(l_plate, l_original)
+    graph = np.zeros((2,15))
+    graph[0,:] = x_vals
+    graph[1,:] = np.array([lod_function(x, d, l_plate) for x in x_vals])
+    print(graph)
+
+    return graph
 
 def lod_function(x, d, mu):
     gamma_term = gamma_function(x + d) / (gamma_function(d) * math.factorial(x))
