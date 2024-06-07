@@ -1,0 +1,38 @@
+.number-input {
+    text-align: center;
+    position: relative;
+    -moz-appearance: textfield;
+}
+
+.number-input::-webkit-outer-spin-button,
+.number-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.number-input::before, .number-input::after {
+    content: '';
+    right: 0;
+    left: 0;
+    position: absolute;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: red;
+    /* display: none; */
+}
+
+.number-input::before:hover, .number-input::after:hover {
+    display: block;
+}
+
+.number-input::before {
+    top: 0;
+    bottom: 0;
+}
+
+.number-input::after {
+    top: 0;
+    bottom: 0;
+}
+

@@ -33,5 +33,3 @@ def lod_function(x, d, mu):
 
 def gamma_function(x):
     return math.factorial(int(x) - 1)
-
-calc_lod(0.05, 0.01, 100, np.array([[1,1],[2,2],[3,3],[3,5],[2,7],[6,5]]))

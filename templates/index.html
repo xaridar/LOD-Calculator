@@ -1,10 +1,91 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<form enctype="multipart/form-data" action="upload" method="post"><input type="file" name="file" id="file"></form>
+<div width="500" height="500">
+    <canvas id="chart" width="500" height="500"></canvas>
+</div>
+<div class="d-flex flex-wrap flex-column gap-3">
+    <div class="d-grid gap-2" id="cv-ctr" data-value="0" data-min="" data-max="" data-step="1">
+        <label for="cv-slider">Coefficient of Variation</label>
+        <input type="range" class="slider" id="cv-slider">
+        <input class="text number-input" type="number">
+    </div>
+    <div class="d-grid gap-2" id="beta-ctr" data-value="0.05" data-min="0.01" data-max="0.5" data-step="0.01">
+        <label for="beta-slider">Type II Error Rate</label>
+        <input type="range" class="slider" id="beta-slider">
+        <input class="text number-input" type="number">
+    </div>
+    <div class="d-grid gap-2" id="n-ctr" data-value="1" data-min="" data-max="" data-step="1">
+        <label for="n-slider">Number of Independent Experiments</label>
+        <input type="range" class="slider" id="n-slider">
+        <input class="text number-input" type="number">
+    </div>
+    <div class="d-grid gap-2" id="k-ctr" data-value="0.01" data-min="0" data-max="1" data-step="0.01">
+        <label for="k-slider">Dilution Factor</label>
+        <input type="range" class="slider" id="k-slider">
+        <input class="text number-input" type="number">
+    </div>
+    <div class="d-grid gap-2" id="u-ctr" data-value="100" data-min="10" data-max="20000" data-step="10">
+        <label for="u-slider">Plate Volume (μL)</label>
+        <input type="range" class="slider" id="u-slider">
+        <input class="text number-input" type="number">
+    </div>
+</div>
 <script>
-    $("#file").change((e) => {
-        $(e.target.parentNode).submit();
+    const lod = (x, cv, beta, n, k, u) => {
+        return cv + beta + n + k + u + x;
+    }
+
+    const ctx = $('#chart')[0].getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels | safe }},
+            params: {
+                cv: {
+                    ctr: $('#cv-ctr'),
+                },
+                beta: {
+                    ctr: $('#beta-ctr'),
+                },
+                n: {
+                    ctr: $('#n-ctr'),
+                },
+                k: {
+                    ctr: $('#k-ctr'),
+                },
+                u: {
+                    ctr: $('#u-ctr'),
+                },
+            },
+            datasets: [
+                {
+                    label: 'LOD Curve',
+                    function: (params, x) => {
+                        return lod(x, params.cv, params.beta, params.n, params.k, params.u)
+                    },
+                    data: [],
+                    fill: false,
+                    borderColor: 'blue',
+                    lineTension: 0.35,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'LOD per mL',
+                    },
+                },
+            },
+            animation: false,
+        },
     });
+    
 </script>
 {% endblock %}
