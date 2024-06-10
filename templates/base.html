@@ -11,6 +11,11 @@
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body class="pt-1 p-lg-4">
+    <div class="d-flex gap-3 form-check form-switch position-absolute top-0 start-0 m-4">
+        <label role="button" id="lightMode">Light Mode</label>
+        <input id="darkModeCheck" class="form-check-input click" role="switch" type="checkbox">
+        <label role="button" id="darkMode">Dark Mode</label>
+    </div>
     <div class="d-flex flex-column align-items-center justify-content-center">
         {% block content %}{% endblock %}
     </div>

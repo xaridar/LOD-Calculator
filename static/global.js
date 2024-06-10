@@ -1,4 +1,5 @@
 const _setDarkMode = () => {
+    $('#darkModeCheck').attr('checked', darkMode);
     $('html')[0].dataset.bsTheme = darkMode ? 'dark' : 'light';
     if (darkMode) {
         chart.options.scales.x.title.color = 'white';
@@ -18,12 +19,25 @@ const _setDarkMode = () => {
     chart.update();
 }
 
+$('#darkModeCheck').change((e) => {
+    setDarkMode($(e.target)[0].checked);
+});
+
+$('#lightMode').click(() => {
+    setDarkMode(false);
+});
+
+$('#darkMode').click(() => {
+    setDarkMode(true);
+});
+
 let darkMode = localStorage.getItem('lod-theme') === 'dark';
 _setDarkMode();
 
 const setDarkMode = (bool) => {
     if (darkMode === bool) return;
     localStorage.setItem('lod-theme', bool ? 'dark' : 'light');
+    $('#darkModeCheck')[0].checked = !darkMode;
     darkMode = bool;
     _setDarkMode();
 }
