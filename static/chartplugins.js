@@ -3,19 +3,18 @@ Chart.register({
     beforeInit: (chart) => {
         const params = chart.data.params;
         for (const param in params) {
-            paramInfo = params[param];
 
             // get components via DOM manipulation
-            paramInfo.picker = paramInfo.ctr.find('.slider');
-            paramInfo.text = paramInfo.ctr.find('.text');
-            const picker = paramInfo.picker;
-            const text = paramInfo.text;
+            chart.data.params[param].picker = chart.data.params[param].ctr.find('.slider');
+            chart.data.params[param].text = chart.data.params[param].ctr.find('.text');
+            const picker = chart.data.params[param].picker;
+            const text = chart.data.params[param].text;
 
             // set values and listeners based on data attributes
-            const value = paramInfo.ctr[0].dataset.value;
-            const min = paramInfo.ctr[0].dataset.min;
-            const max = paramInfo.ctr[0].dataset.max;
-            const step = paramInfo.ctr[0].dataset.step;
+            const value = +chart.data.params[param].ctr[0].dataset.value;
+            const min = +chart.data.params[param].ctr[0].dataset.min;
+            const max = +chart.data.params[param].ctr[0].dataset.max;
+            const step = +chart.data.params[param].ctr[0].dataset.step;
 
             // picker attrs
             picker.val(value);
@@ -27,31 +26,34 @@ Chart.register({
             text.val(value);
             
             // set initial values
-            paramInfo.value = value;
-            paramInfo.mousedown = false;
+            chart.data.params[param].value = value;
+            chart.data.params[param].mousedown = false;
+
+            const setVal = (val) => {
+                chart.data.params[param].value = val;
+                picker.val(val);
+                text.val(val);
+                chart.update();
+            }
 
             // listeners
             picker.mousedown(function () {
-                paramInfo.mousedown = true;
+                chart.data.params[param].mousedown = true;
             });
             picker.mouseup(function () {
-                paramInfo.mousedown = false;
+                chart.data.params[param].mousedown = false;
             });
             picker.mousemove(function () {
-                if (!paramInfo.mousedown) return;
-                paramInfo.value = $(this).val();
-                text.val($(this).val());
-                chart.update();
+                if (!chart.data.params[param].mousedown) return;
+                setVal($(this).val());
             });
             picker.change(function () {
-                paramInfo.value = $(this).val();
-                text.val($(this).val());
-                chart.update();
+                setVal($(this).val());
             });
-            paramInfo.text.change(function () {
-                paramInfo.value = $(this).val();
-                picker.val($(this).val());
-                chart.update();
+            chart.data.params[param].text.change(function () {
+                if ($(this).val() < min) setVal(min);
+                else if ($(this).val() > max) setVal(max);
+                else setVal($(this).val());
             });
         }
     },

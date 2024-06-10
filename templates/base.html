@@ -10,12 +10,10 @@
     <link rel="stylesheet" href="/static/styles.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="min-vh-100 padding-4">
-    <script src="/static/chartplugins.js"></script>
-    <div class="min-vh-100 d-flex align-items-center justify-content-center">
-        <div class="d-flex flex-row align-items-center gap-4">
-            {% block content %}{% endblock %}
-        </div>
+<body class="p-4">
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        {% block content %}{% endblock %}
     </div>
+    <script src="/static/global.js"></script>
 </body>
 </html>

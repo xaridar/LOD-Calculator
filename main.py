@@ -11,5 +11,4 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/index')
 def index():
-    x_list = np.arange(0, 50, 1).tolist()
-    return render_template('index.html', labels=x_list)
+    return render_template('index.html')

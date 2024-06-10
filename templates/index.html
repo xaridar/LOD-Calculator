@@ -1,91 +1,58 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-<div width="500" height="500">
-    <canvas id="chart" width="500" height="500"></canvas>
-</div>
-<div class="d-flex flex-wrap flex-column gap-3">
-    <div class="d-grid gap-2" id="cv-ctr" data-value="0" data-min="" data-max="" data-step="1">
-        <label for="cv-slider">Coefficient of Variation</label>
-        <input type="range" class="slider" id="cv-slider">
-        <input class="text number-input" type="number">
-    </div>
-    <div class="d-grid gap-2" id="beta-ctr" data-value="0.05" data-min="0.01" data-max="0.5" data-step="0.01">
-        <label for="beta-slider">Type II Error Rate</label>
-        <input type="range" class="slider" id="beta-slider">
-        <input class="text number-input" type="number">
-    </div>
-    <div class="d-grid gap-2" id="n-ctr" data-value="1" data-min="" data-max="" data-step="1">
-        <label for="n-slider">Number of Independent Experiments</label>
-        <input type="range" class="slider" id="n-slider">
-        <input class="text number-input" type="number">
-    </div>
-    <div class="d-grid gap-2" id="k-ctr" data-value="0.01" data-min="0" data-max="1" data-step="0.01">
-        <label for="k-slider">Dilution Factor</label>
-        <input type="range" class="slider" id="k-slider">
-        <input class="text number-input" type="number">
-    </div>
-    <div class="d-grid gap-2" id="u-ctr" data-value="100" data-min="10" data-max="20000" data-step="10">
-        <label for="u-slider">Plate Volume (μL)</label>
-        <input type="range" class="slider" id="u-slider">
-        <input class="text number-input" type="number">
-    </div>
-</div>
-<script>
-    const lod = (x, cv, beta, n, k, u) => {
-        return cv + beta + n + k + u + x;
+<style>
+    .hidden {
+        display: none !important;
     }
-
-    const ctx = $('#chart')[0].getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ labels | safe }},
-            params: {
-                cv: {
-                    ctr: $('#cv-ctr'),
-                },
-                beta: {
-                    ctr: $('#beta-ctr'),
-                },
-                n: {
-                    ctr: $('#n-ctr'),
-                },
-                k: {
-                    ctr: $('#k-ctr'),
-                },
-                u: {
-                    ctr: $('#u-ctr'),
-                },
-            },
-            datasets: [
-                {
-                    label: 'LOD Curve',
-                    function: (params, x) => {
-                        return lod(x, params.cv, params.beta, params.n, params.k, params.u)
-                    },
-                    data: [],
-                    fill: false,
-                    borderColor: 'blue',
-                    lineTension: 0.35,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'LOD per mL',
-                    },
-                },
-            },
-            animation: false,
-        },
-    });
-    
-</script>
+    input[type="radio"] {
+        display: none;
+    }
+</style>
+<div>
+    <label for="xVar" class="text-center w-100 mb-2 fs-5 mt-3">X Axis (Independent) Variable</label><br>
+    <div class="btn-group" role="group" aria-label="X Parameter" data-toggle="buttons">
+        <label id="btn-param-cv" class="btn btn-outline-primary">
+            <input type="radio" name="xVar" autocomplete="off">CV
+        </label>
+        <label id="btn-param-beta" class="btn btn-outline-primary">
+            <input type="radio" name="xVar" autocomplete="off">&beta;
+        </label>
+        <label id="btn-param-n" class="btn btn-outline-primary active">
+            <input type="radio" name="xVar" autocomplete="off">n
+        </label>
+        <label id="btn-param-k" class="btn btn-outline-primary">
+            <input type="radio" name="xVar" autocomplete="off">k
+        </label>
+    </div>
+</div>
+<div class="d-flex flex-lg-row align-items-center gap-4 m-4 container justify-content-center flex-column">
+    <div class="w-100">
+        <canvas id="chart" width="500" height="500"></canvas>
+    </div>
+    <div class="d-flex flex-column gap-3 w-100" style="flex-basis: 0;">
+        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="cv-ctr" data-value="0" data-min="0" data-max="10" data-step="0.1">
+            <label for="cv-slider">Coefficient of Variation</label>
+            <input type="range" class="slider" id="cv-slider">
+            <input class="text number-input" type="number">
+        </div>
+        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="beta-ctr" data-value="0.05" data-min="0" data-max="0.5" data-step="0.01">
+            <label for="beta-slider">Type II Error Rate</label>
+            <input type="range" class="slider" id="beta-slider">
+            <input class="text number-input" type="number">
+        </div>
+        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="n-ctr" data-value="1" data-min="1" data-max="100" data-step="1">
+            <label for="n-slider">Number of Independent Experiments</label>
+            <input type="range" class="slider" id="n-slider">
+            <input class="text number-input" type="number">
+        </div>
+        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="k-ctr" data-value="0.01" data-min="0" data-max="1" data-step="0.01">
+            <label for="k-slider">Dilution Factor</label>
+            <input type="range" class="slider" id="k-slider">
+            <input class="text number-input" type="number">
+        </div>
+    </div>
+</div>
+<script src="/static/chartplugins.js"></script>
+<script src="/static/graph.js"></script>
 {% endblock %}
