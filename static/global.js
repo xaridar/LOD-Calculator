@@ -23,14 +23,6 @@ $('#darkModeCheck').change((e) => {
     setDarkMode($(e.target)[0].checked);
 });
 
-$('#lightMode').click(() => {
-    setDarkMode(false);
-});
-
-$('#darkMode').click(() => {
-    setDarkMode(true);
-});
-
 let darkMode = localStorage.getItem('lod-theme') === 'dark';
 _setDarkMode();
 
