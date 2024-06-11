@@ -2,6 +2,13 @@
     transition: color, background-color 0.2s ease;
 }
 
+label[for="darkModeCheck"] {
+    height: 3rem;
+    --bs-border-radius: 1.5rem;
+    margin: auto;
+    margin-inline: 0.5rem;
+}
+
 #check {
     width: 50%;
 
@@ -12,7 +19,7 @@
 }
 
 #darkModeCheck:checked + #check {
-    left: calc(50%);
+    left: 50%;
     border-radius: unset;
     border-start-end-radius: inherit;
     border-end-end-radius: inherit;
@@ -29,4 +36,11 @@
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
+}
+
+@media screen and (min-width: 576px) {
+    label[for="darkModeCheck"] {
+        width: fit-content;
+        margin-inline: auto;
+    }
 }

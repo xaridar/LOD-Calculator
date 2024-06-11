@@ -1,4 +1,12 @@
 let xVar = '';
+let shortXVar = false;
+
+const resize = () => {
+    shortXVar = (window.innerWidth < 500);
+    setX(xVar);
+}
+
+$(window).resize(resize);
 
 const scale = [];
 
@@ -84,7 +92,8 @@ const setX = (newX) => {
     setScale(+ctr[0].dataset.min, +ctr[0].dataset.max, +ctr[0].dataset.step);
 
     // set label text accordingly
-    chart.options.scales.x.title.text = ctr.find('label').text();
+    if (shortXVar) chart.options.scales.x.title.text = $(`#btn-param-${ctr.find('input').attr('id').split('-slider')[0]}`).text();
+    else chart.options.scales.x.title.text = ctr.find('label').text();
 
     // update chart
     chart.update();
@@ -101,6 +110,7 @@ const setScale = (min, max, step) => {
 }
 
 setX('n');
+resize();
 
 $('[name="xVar"]').change((e) => {
     $('[id^="btn-param-"].active').toggleClass('active', false);

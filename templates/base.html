@@ -11,12 +11,12 @@
     <link rel="stylesheet" href="/static/styles.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="pt-1 p-lg-4">
-    <label role="button" for="darkModeCheck" class="card d-flex flex-row gap-4 form-switch px-2 py-1 position-absolute top-0 start-0 m-4 align-items-center" style="height: 2rem; --bs-border-radius: 1rem;">
+<body class="pt-4 p-lg-4">
+    <label role="button" for="darkModeCheck" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
         <input id="darkModeCheck" class="d-none" type="checkbox">
         <span id="check" class="position-absolute top-0 bottom-0 z-1 bg-primary opacity-50"></span>
-        <span id="lightMode" class="bi bi-sun-fill z-2" style="color: rgb(var(--bs-primary--subtle));"></span>
-        <span id="darkMode" class="bi bi-moon-fill z-2" style="color: rgb(var(--bs-primary--subtle));"></span>
+        <span id="lightMode" class="bi bi-sun-fill z-2"></span>
+        <span id="darkMode" class="bi bi-moon-fill z-2"></span>
     </label>
     <div class="d-flex flex-column align-items-center justify-content-center">
         {% block content %}{% endblock %}
