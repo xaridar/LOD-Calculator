@@ -2,7 +2,7 @@ let xVar = '';
 let shortXVar = false;
 
 const resize = () => {
-    shortXVar = (window.innerWidth < 500);
+    shortXVar = (window.innerWidth < 375);
     setX(xVar);
 }
 
@@ -96,7 +96,9 @@ const setX = (newX) => {
     else chart.options.scales.x.title.text = ctr.find('label').text();
 
     // update chart
+    chart.options.animation = false;
     chart.update();
+    chart.options.animation = true;
 }
 
 const setScale = (min, max, step) => {
@@ -116,4 +118,22 @@ $('[name="xVar"]').change((e) => {
     $('[id^="btn-param-"].active').toggleClass('active', false);
     $(e.target.parentElement).toggleClass('active', true);
     setX($(e.target.parentElement).attr('id').split('btn-param-')[1].toLowerCase());
-})
+});
+
+$('[id^="btn-param-"] input').focus((e) => {
+    console.log(e);
+    $(e.target.parentElement).toggleClass('focus', true);
+});
+
+$('[id^="btn-param-"] input').focusout((e) => {
+    $(e.target.parentElement).toggleClass('focus', false);
+});
+
+$('#darkModeCheck').focus((e) => {
+    console.log(e);
+    $(e.target.parentElement).toggleClass('focus', true);
+});
+
+$('#darkModeCheck').focusout((e) => {
+    $(e.target.parentElement).toggleClass('focus', false);
+});
