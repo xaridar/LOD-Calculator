@@ -9,50 +9,56 @@
         appearance: none;
     }
 </style>
-<div class="d-flex flex-column mx-2">
-    <label for="xVar" class="text-center w-100 mb-2 fs-5 mt-3">X Axis (Independent) Variable</label>
-    <div class="btn-group" role="group" aria-label="X Parameter" data-toggle="buttons">
-        <label id="btn-param-cv" class="btn btn-outline-primary">
-            <input type="radio" name="xVar" autocomplete="off">CV
-        </label>
-        <label id="btn-param-beta" class="btn btn-outline-primary">
-            <input type="radio" name="xVar" autocomplete="off">&beta;
-        </label>
-        <label id="btn-param-n" class="btn btn-outline-primary active">
-            <input type="radio" name="xVar" autocomplete="off" checked>n
-        </label>
-        <label id="btn-param-k" class="btn btn-outline-primary">
-            <input type="radio" name="xVar" autocomplete="off">k
-        </label>
+<div class="d-flex flex-row flex-wrap gap-3 justify-content-center align-items-end">
+    <div class="d-flex flex-column mx-2">
+        <label for="xVar" class="text-center w-100 mb-2 fs-5 mt-3">X Axis (Independent) Variable</label>
+        <div class="btn-group" role="group" aria-label="X Parameter" data-toggle="buttons">
+            <label id="btn-param-cv" class="btn btn-outline-primary">
+                <input type="radio" name="xVar" autocomplete="off">CV
+            </label>
+            <label id="btn-param-beta" class="btn btn-outline-primary">
+                <input type="radio" name="xVar" autocomplete="off">&beta;
+            </label>
+            <label id="btn-param-n" class="btn btn-outline-primary">
+                <input type="radio" name="xVar" autocomplete="off">n
+            </label>
+            <label id="btn-param-k" class="btn btn-outline-primary">
+                <input type="radio" name="xVar" autocomplete="off">k
+            </label>
+        </div>
     </div>
-</div>
-<div class="d-flex flex-column mx-2">
-    <label for=""></label>
+    <label id="btn-param-calc" class="btn btn-outline-primary">
+        <input type="radio" name="xVar" autocomplete="off">Calculate Single Value
+    </label>
 </div>
 <div class="d-flex flex-lg-row align-items-center gap-4 m-4 container justify-content-center flex-column">
     <div class="w-100">
         <canvas id="chart" width="500" height="500"></canvas>
     </div>
     <div class="d-flex flex-column gap-3 w-100">
-        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="cv-ctr" data-value="0" data-min="0" data-max="10" data-step="0.1">
+        <div class="d-grid gap-2 form-group w-100" id="cv-ctr" data-value="0" data-min="0" data-max="10" data-step="0.1">
             <label for="cv-slider">Coefficient of Variation (CV)</label>
             <input type="range" class="slider form-range" id="cv-slider">
-            <input class="text number-input form-control" type="number">
+            <input class="user-select-all text number-input form-control" id="cv-text" type="number">
         </div>
-        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="beta-ctr" data-value="0.05" data-min="0" data-max="0.5" data-step="0.01">
+        <div class="d-grid gap-2 form-group w-100" id="beta-ctr" data-value="0.05" data-min="0" data-max="0.5" data-step="0.01">
             <label for="beta-slider">Type II Error Rate (&beta;)</label>
             <input type="range" class="slider form-range" id="beta-slider">
-            <input class="text number-input form-control" type="number">
+            <input class="user-select-all text number-input form-control" id="beta-text" type="number">
         </div>
-        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="n-ctr" data-value="1" data-min="1" data-max="100" data-step="1">
+        <div class="d-grid gap-2 form-group w-100" id="n-ctr" data-value="1" data-min="1" data-max="100" data-step="1">
             <label for="n-slider">Number of Independent Experiments (n)</label>
             <input type="range" class="slider form-range" id="n-slider">
-            <input class="text number-input form-control" type="number">
+            <input class="user-select-all text number-input form-control" id="n-text" type="number">
         </div>
-        <div class="d-grid gap-2 form-group w-100 text-nowrap" id="k-ctr" data-value="0.01" data-min="0" data-max="1" data-step="0.01">
+        <div class="d-grid gap-2 form-group w-100" id="k-ctr" data-value="0.01" data-min="0" data-max="1" data-step="0.01">
             <label for="k-slider">Dilution Factor (k)</label>
             <input type="range" class="slider form-range" id="k-slider">
-            <input class="text number-input form-control" type="number">
+            <input class="user-select-all text number-input form-control" id="k-text" type="number">
+        </div>
+        <div class="d-grid gap-2 form-group w-100 hidden" style="margin-top: 5rem" id="lod-results">
+            <label for="lod-text" class="h4">Limit of Detection (LOD) per mL</label>
+            <input class="text form-control" id="lod-text" type="number" disabled>
         </div>
     </div>
 </div>

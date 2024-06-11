@@ -52,7 +52,7 @@ Chart.register({
             });
             chart.data.params[param].text.change(function () {
                 if ($(this).val() < min) setVal(min);
-                else if ($(this).val() > max) setVal(max);
+                else if ($(this).val() > max && maxEnabled) setVal(max);
                 else setVal($(this).val());
             });
         }

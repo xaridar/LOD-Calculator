@@ -1,5 +1,7 @@
 let xVar = '';
 let shortXVar = false;
+let maxEnabled = true;
+
 
 const resize = () => {
     shortXVar = (window.innerWidth < 375);
@@ -10,7 +12,7 @@ $(window).resize(resize);
 
 const scale = [];
 
-const lod = (cv, beta, n, k) => {
+const lod = ({cv, beta, n, k}) => {
     if (cv === 0) return -Math.log(beta) / (n * k);
     else {
         d = 1 / Math.pow(cv, 2);
@@ -42,7 +44,7 @@ const chart = new Chart(ctx, {
                 label: 'Limit of Detection',
                 function: (params, x) => {
                     params[xVar] = x;
-                    return lod(params.cv, params.beta, params.n, params.k)
+                    return lod(params)
                 },
                 data: [],
                 fill: false,
@@ -80,7 +82,7 @@ Chart.defaults.font.size = 16;
 Chart.defaults.font.family = 'monospace';
 
 const setX = (newX) => {
-    if (!['cv', 'beta', 'n', 'k'].includes(newX)) return;
+    if (!['cv', 'beta', 'n', 'k'].includes(newX) || !maxEnabled) return;
     xVar = newX;
     
     // hide slider container for var on x-axis
@@ -111,17 +113,48 @@ const setScale = (min, max, step) => {
     }
 }
 
-setX('n');
 resize();
+
+const showCalc = () => {
+    $($('#chart')[0].parentElement).toggleClass('hidden', true);
+    $('[id$="-slider"]').toggleClass('hidden', true);
+    $('[id$="-ctr"]').toggleClass('hidden', false);
+    $('#lod-results').toggleClass('hidden', false);
+    maxEnabled = false;
+
+    // reset labels accordingly
+    $('[id$="-ctr"] label').each(function() {
+        $(this).attr('for', `${$(this).attr('for').split('-')[0]}-text`);
+    });
+}
+
+const showChart = () => {
+    $($('#chart')[0].parentElement).toggleClass('hidden', false);
+    $('[id$="-slider"]').toggleClass('hidden', false);
+    $('#lod-results').toggleClass('hidden', true);
+    maxEnabled = true;
+
+    // reset labels accordingly
+    $('[id$="-ctr"] label').each(function() {
+        $(this).attr('for', `${$(this).attr('for').split('-')[0]}-text`);
+    });
+}
 
 $('[name="xVar"]').change((e) => {
     $('[id^="btn-param-"].active').toggleClass('active', false);
     $(e.target.parentElement).toggleClass('active', true);
-    setX($(e.target.parentElement).attr('id').split('btn-param-')[1].toLowerCase());
+    const x = $(e.target.parentElement).attr('id').split('btn-param-')[1].toLowerCase();
+    if (x !== 'calc') {
+        window.location.hash = x;
+        showChart();
+        setX(x);
+    } else {
+        window.location.hash = 'calc';
+        showCalc();
+    }
 });
 
 $('[id^="btn-param-"] input').focus((e) => {
-    console.log(e);
     $(e.target.parentElement).toggleClass('focus', true);
 });
 
@@ -130,10 +163,45 @@ $('[id^="btn-param-"] input').focusout((e) => {
 });
 
 $('#darkModeCheck').focus((e) => {
-    console.log(e);
     $(e.target.parentElement).toggleClass('focus', true);
 });
 
 $('#darkModeCheck').focusout((e) => {
     $(e.target.parentElement).toggleClass('focus', false);
 });
+
+const calcVal = () => {
+    const params = JSON.parse(JSON.stringify(chart.data.params));
+    for (const x in params) params[x] = +params[x].value;
+    $('#lod-text').val(lod(params));
+}
+
+$(`[id$="-text"]`).change(() => {
+    calcVal();
+});
+calcVal();
+
+$('.number-input').focus(function() {
+    $(this).select();
+});
+console.log(window.location.hash);
+if (window.location.hash === '#calc') {
+    $('#btn-param-calc input').attr('checked', true).change();
+    showCalc();
+}
+if (window.location.hash === '#cv') {
+    $('#btn-param-cv input').attr('checked', true).change();
+    showChart();
+}
+if (window.location.hash === '#beta') {
+    $('#btn-param-beta input').attr('checked', true).change();
+    showChart();
+}
+if (window.location.hash === '#n') {
+    $('#btn-param-n input').attr('checked', true).change();
+    showChart();
+}
+if (window.location.hash === '#k') {
+    $('#btn-param-k input').attr('checked', true).change();
+    showChart();
+}
