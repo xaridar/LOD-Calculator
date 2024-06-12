@@ -13,23 +13,18 @@
     <div class="d-flex flex-column mx-2">
         <label for="xVar" class="text-center w-100 mb-2 fs-5 mt-3">X Axis (Independent) Variable</label>
         <div class="btn-group" role="group" aria-label="X Parameter" data-toggle="buttons">
-            <label id="btn-param-cv" class="btn btn-outline-primary">
-                <input type="radio" name="xVar" autocomplete="off">CV
-            </label>
-            <label id="btn-param-beta" class="btn btn-outline-primary">
-                <input type="radio" name="xVar" autocomplete="off">&beta;
-            </label>
-            <label id="btn-param-n" class="btn btn-outline-primary">
-                <input type="radio" name="xVar" autocomplete="off">n
-            </label>
-            <label id="btn-param-k" class="btn btn-outline-primary">
-                <input type="radio" name="xVar" autocomplete="off">k
-            </label>
+            <label for="cvSelect" id="btn-param-cv" class="btn btn-outline-primary">CV</label>
+            <input id="cvSelect" type="radio" name="xVar" autocomplete="off">
+            <label for="betaSelect" id="btn-param-beta" class="btn btn-outline-primary">&beta;</label>
+            <input id="betaSelect" type="radio" name="xVar" autocomplete="off">
+            <label for="nSelect" id="btn-param-n" class="btn btn-outline-primary">n</label>
+            <input id="nSelect" type="radio" name="xVar" autocomplete="off">
+            <input id="kSelect" type="radio" name="xVar" autocomplete="off">
+            <label for="kSelect" id="btn-param-k" class="btn btn-outline-primary">k</label>
         </div>
     </div>
-    <label id="btn-param-calc" class="btn btn-outline-primary">
-        <input type="radio" name="xVar" autocomplete="off">Calculate Single Value
-    </label>
+    <label for="calcSelect" id="btn-param-calc" class="btn btn-outline-primary">Calculate Single Value</label>
+    <input id="calcSelect" type="radio" name="xVar" autocomplete="off">
 </div>
 <div class="d-flex flex-lg-row align-items-center gap-4 m-4 container justify-content-center flex-column">
     <div class="w-100">

@@ -140,34 +140,35 @@ const showChart = () => {
     });
 }
 
-$('[name="xVar"]').change((e) => {
+$('[name="xVar"]').change(function() {
     $('[id^="btn-param-"].active').toggleClass('active', false);
-    $(e.target.parentElement).toggleClass('active', true);
-    const x = $(e.target.parentElement).attr('id').split('btn-param-')[1].toLowerCase();
+    const x = $(this).attr('id').split('Select')[0];
+    $(`[for="${x}Select"]`).toggleClass('active', true);
+    window.location.hash = x;
     if (x !== 'calc') {
-        window.location.hash = x;
         showChart();
         setX(x);
     } else {
-        window.location.hash = 'calc';
         showCalc();
     }
 });
 
-$('[id^="btn-param-"] input').focus((e) => {
-    $(e.target.parentElement).toggleClass('focus', true);
+$('[id$="Select"]').focus(function () {
+    const x = $(this).attr('id').split('Select')[0];
+    $(`#btn-param-${x}`).toggleClass('focus', true);
 });
 
-$('[id^="btn-param-"] input').focusout((e) => {
-    $(e.target.parentElement).toggleClass('focus', false);
+$('[id$="Select"]').focusout(function ()  {
+    const x = $(this).attr('id').split('Select')[0];
+    $(`#btn-param-${x}`).toggleClass('focus', false);
 });
 
-$('#darkModeCheck').focus((e) => {
-    $(e.target.parentElement).toggleClass('focus', true);
+$('#darkModeCheck').focus(function () {
+    $(this).parent().toggleClass('focus', true);
 });
 
-$('#darkModeCheck').focusout((e) => {
-    $(e.target.parentElement).toggleClass('focus', false);
+$('#darkModeCheck').focusout(function () {
+    $(this).parent().toggleClass('focus', false);
 });
 
 const calcVal = () => {
@@ -184,24 +185,9 @@ calcVal();
 $('.number-input').focus(function() {
     $(this).select();
 });
-console.log(window.location.hash);
-if (window.location.hash === '#calc') {
-    $('#btn-param-calc input').attr('checked', true).change();
-    showCalc();
-}
-if (window.location.hash === '#cv') {
-    $('#btn-param-cv input').attr('checked', true).change();
-    showChart();
-}
-if (window.location.hash === '#beta') {
-    $('#btn-param-beta input').attr('checked', true).change();
-    showChart();
-}
-if (window.location.hash === '#n') {
-    $('#btn-param-n input').attr('checked', true).change();
-    showChart();
-}
-if (window.location.hash === '#k') {
-    $('#btn-param-k input').attr('checked', true).change();
-    showChart();
+
+if (['#calc', '#cv', '#beta', '#n', '#k'].includes(window.location.hash)) {
+    $(`${window.location.hash}Select`).attr('checked', true).change();
+} else if (!window.location.hash) {
+    $('#nSelect').attr('checked', true).change();
 }
