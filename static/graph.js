@@ -85,6 +85,10 @@ const setX = (newX) => {
     if (!['cv', 'beta', 'n', 'k'].includes(newX) || !maxEnabled) return;
     xVar = newX;
     
+    // toggle active button
+    $('[id^="btn-param-"].active').toggleClass('active', false);
+    $(`#btn-param-${newX}`).toggleClass('active', true);
+    
     // hide slider container for var on x-axis
     $('[id$="-ctr"]').toggleClass('hidden', false);
     const ctr = $(`#${newX}-ctr`);
@@ -116,6 +120,10 @@ const setScale = (min, max, step) => {
 resize();
 
 const showCalc = () => {
+    // select calc button
+    $('[id^="btn-param-"]').toggleClass('active', false);
+    $(`#btn-param-calc`).toggleClass('active', true);
+
     $($('#chart')[0].parentElement).toggleClass('hidden', true);
     $('[id$="-slider"]').toggleClass('hidden', true);
     $('[id$="-ctr"]').toggleClass('hidden', false);
@@ -153,16 +161,6 @@ $('[name="xVar"]').change(function() {
     }
 });
 
-$('[id$="Select"]').focus(function () {
-    const x = $(this).attr('id').split('Select')[0];
-    $(`#btn-param-${x}`).toggleClass('focus', true);
-});
-
-$('[id$="Select"]').focusout(function ()  {
-    const x = $(this).attr('id').split('Select')[0];
-    $(`#btn-param-${x}`).toggleClass('focus', false);
-});
-
 $('#darkModeCheck').focus(function () {
     $(this).parent().toggleClass('focus', true);
 });
@@ -187,7 +185,7 @@ $('.number-input').focus(function() {
 });
 
 if (['#calc', '#cv', '#beta', '#n', '#k'].includes(window.location.hash)) {
-    $(`${window.location.hash}Select`).attr('checked', true).change();
+    $(`#btn-param-${window.location.hash.split('#')[1]}`).click();
 } else if (!window.location.hash) {
-    $('#nSelect').attr('checked', true).change();
+    $('#btn-param-n').attr('checked', true).change();
 }

@@ -31,6 +31,7 @@ Chart.register({
 
             const setVal = (val) => {
                 chart.data.params[param].value = val;
+                picker.attr('aria-valuenow', val);
                 picker.val(val);
                 text.val(val);
                 chart.update();

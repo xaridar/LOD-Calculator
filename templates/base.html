@@ -3,17 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Primary Meta Tags -->
+    <title>Limit of Detection Calculator</title>
+    <meta name="title" content="Limit of Detection Calculator" />
+    <meta name="description" content="Adapts the LOD Model proposed in Sharp, Parker, and Hamilton (2023) into a dynamic web interface for calculating microbe sample Limits of Detection." />
+    <meta name="keywords" content="LOD, limits of detection, microbe samples" />
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://metatags.io/" />
+    <meta property="og:title" content="Limit of Detection Calculator" />
+    <meta property="og:description" content="Adapts the LOD Model proposed in Sharp, Parker, and Hamilton (2023) into a dynamic web interface for calculating microbe sample Limits of Detection." />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://metatags.io/" />
+    <meta property="twitter:title" content="Limit of Detection Calculator" />
+    <meta property="twitter:description" content="Adapts the LOD Model proposed in Sharp, Parker, and Hamilton (2023) into a dynamic web interface for calculating microbe sample Limits of Detection." />
+    
+    <!-- Meta Tags Generated with https://metatags.io -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" integrity="sha384-QuGBSgV5Im3DzL2z+8Ko9/hqNy/N0O7zwvXAtfd1MvPKWa/UbeLV65cfm4BV5Wgq" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/styles.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body class="pt-4 p-lg-4">
-    <label role="button" for="darkModeCheck" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
-        <input id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox">
+    <label for="darkModeCheck" style="cursor: pointer" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
+        <input aria-label="Toggle Dark Mode" id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox">
         <span id="check" class="position-absolute top-0 bottom-0 z-1 bg-primary opacity-50"></span>
         <span id="lightMode" class="bi bi-sun-fill z-2"></span>
         <span id="darkMode" class="bi bi-moon-fill z-2"></span>
