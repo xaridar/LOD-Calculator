@@ -1,25 +1,18 @@
+// Global variables
 let xVar = '';
 let shortXVar = false;
 let maxEnabled = true;
-
-
-const resize = () => {
-    shortXVar = (window.innerWidth < 375);
-    setX(xVar);
-}
-
-$(window).resize(resize);
-
 const scale = [];
 
 const lod = ({cv, beta, n, k}) => {
     if (cv === 0) return -Math.log(beta) / (n * k);
     else {
-        d = 1 / Math.pow(cv, 2);
+        const d = 1 / Math.pow(cv, 2);
         return ((d / Math.pow(beta, 1 / (n * d))) - d) / k;
     }
 }
 
+// Create Chart.js chart
 const ctx = $('#chart')[0].getContext('2d');
 const chart = new Chart(ctx, {
     type: 'line',
@@ -59,6 +52,16 @@ const chart = new Chart(ctx, {
             legend: {
                 display: false,
             },
+            tooltip: {
+                callbacks: {
+                    title: t => {
+                        return `(${t[0].label}, ${t[0].formattedValue})`;
+                    },
+                    label: () => {
+                        return null;
+                    }
+                }
+            }
         },
         scales: {
             y: {
@@ -80,6 +83,7 @@ const chart = new Chart(ctx, {
 
 Chart.defaults.font.size = 16;
 Chart.defaults.font.family = 'monospace';
+
 
 const setX = (newX) => {
     if (!['cv', 'beta', 'n', 'k'].includes(newX) || !maxEnabled) return;
@@ -107,6 +111,12 @@ const setX = (newX) => {
     chart.options.animation = true;
 }
 
+const resize = () => {
+    shortXVar = (window.innerWidth < 375);
+    setX(xVar);
+}
+resize();
+
 const setScale = (min, max, step) => {
     // clears scale
     scale.length = 0;
@@ -117,75 +127,31 @@ const setScale = (min, max, step) => {
     }
 }
 
-resize();
-
-const showCalc = () => {
-    // select calc button
-    $('[id^="btn-param-"]').toggleClass('active', false);
-    $(`#btn-param-calc`).toggleClass('active', true);
-
-    $($('#chart')[0].parentElement).toggleClass('hidden', true);
-    $('[id$="-slider"]').toggleClass('hidden', true);
-    $('[id$="-ctr"]').toggleClass('hidden', false);
-    $('#lod-results').toggleClass('hidden', false);
-    maxEnabled = false;
-
-    // reset labels accordingly
-    $('[id$="-ctr"] label').each(function() {
-        $(this).attr('for', `${$(this).attr('for').split('-')[0]}-text`);
-    });
-}
-
-const showChart = () => {
-    $($('#chart')[0].parentElement).toggleClass('hidden', false);
-    $('[id$="-slider"]').toggleClass('hidden', false);
-    $('#lod-results').toggleClass('hidden', true);
-    maxEnabled = true;
-
-    // reset labels accordingly
-    $('[id$="-ctr"] label').each(function() {
-        $(this).attr('for', `${$(this).attr('for').split('-')[0]}-text`);
-    });
-}
-
-$('[name="xVar"]').change(function() {
-    $('[id^="btn-param-"].active').toggleClass('active', false);
-    const x = $(this).attr('id').split('Select')[0];
-    $(`[for="${x}Select"]`).toggleClass('active', true);
-    window.location.hash = x;
-    if (x !== 'calc') {
-        showChart();
-        setX(x);
-    } else {
-        showCalc();
-    }
-});
-
-$('#darkModeCheck').focus(function () {
-    $(this).parent().toggleClass('focus', true);
-});
-
-$('#darkModeCheck').focusout(function () {
-    $(this).parent().toggleClass('focus', false);
-});
-
 const calcVal = () => {
     const params = JSON.parse(JSON.stringify(chart.data.params));
     for (const x in params) params[x] = +params[x].value;
-    $('#lod-text').val(lod(params));
+    const lodVal = lod(params);
+    $('#lod-text').val(new Intl.NumberFormat('en-US').format(
+        lodVal,
+    ));
 }
 
-$(`[id$="-text"]`).change(() => {
+$(`[id$="-text"], [id$="-slider"]`).change(function () {
+    // save parameter values to localStorage for data persistence
+    localStorage.setItem(`lod-param-${$(this).attr('id').split('-')[0]}`, $(this).val());
+
     calcVal();
 });
 calcVal();
 
-$('.number-input').focus(function() {
-    $(this).select();
-});
-
-if (['#calc', '#cv', '#beta', '#n', '#k'].includes(window.location.hash)) {
-    $(`#btn-param-${window.location.hash.split('#')[1]}`).click();
-} else if (!window.location.hash) {
-    $('#btn-param-n').attr('checked', true).change();
+const checkPath = () => {
+    if (window.location.pathname == '/calc') return;
+    const hash = window.location.hash;
+    if (['#cv', '#beta', '#n', '#k'].includes(hash)) {
+        setX(hash.split('#')[1]);
+    } else if (!hash) {
+        setX('n');
+    }
 }
+
+checkPath();

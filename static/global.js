@@ -23,8 +23,17 @@ $('#darkModeCheck').change((e) => {
     setDarkMode($(e.target)[0].checked);
 });
 
+$('#darkModeCheck').focus(function () {
+    $(this).parent().toggleClass('focus', true);
+});
+
+$('#darkModeCheck').focusout(function () {
+    $(this).parent().toggleClass('focus', false);
+});
+
 let darkMode = localStorage.getItem('lod-theme') === 'dark';
 _setDarkMode();
+
 
 const setDarkMode = (bool) => {
     if (darkMode === bool) return;
@@ -32,4 +41,23 @@ const setDarkMode = (bool) => {
     $('#darkModeCheck')[0].checked = !darkMode;
     darkMode = bool;
     _setDarkMode();
+}
+
+/* Help controls */
+if (!localStorage.getItem('lod-helpClosed')) $('#help').removeClass('hidden');
+
+$(document).keydown((e) => {
+    if (e.code == 'Escape') {
+        $('#help').toggleClass('hidden');
+        localStorage.setItem('lod-helpClosed', true);
+    }
+});
+
+if ("serviceWorker" in navigator) {
+    $(window).on("load", () => {
+        navigator.serviceWorker
+            .register("/static/serviceWorker.js")
+            .then(() => console.log("service worker registered"))
+            .catch(err => console.log("service worker not registered", err))
+    })
 }

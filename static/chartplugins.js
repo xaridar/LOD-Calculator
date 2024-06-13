@@ -11,31 +11,30 @@ Chart.register({
             const text = chart.data.params[param].text;
 
             // set values and listeners based on data attributes
-            const value = +chart.data.params[param].ctr[0].dataset.value;
+            const value = localStorage.getItem(`lod-param-${param}`) || +chart.data.params[param].ctr[0].dataset.value;
             const min = +chart.data.params[param].ctr[0].dataset.min;
-            const max = +chart.data.params[param].ctr[0].dataset.max;
+            const max = +(chart.data.params[param].ctr[0].dataset.max || -1);
             const step = +chart.data.params[param].ctr[0].dataset.step;
 
             // picker attrs
-            picker.val(value);
             picker.attr('min', min);
-            picker.attr('max', max);
+            if (max > -1) picker.attr('max', max);
             picker.attr('step', step);
             
-            // text attrs
-            text.val(value);
-            
             // set initial values
-            chart.data.params[param].value = value;
             chart.data.params[param].mousedown = false;
 
             const setVal = (val) => {
+                if (val < min) setVal(min);
+                else if (val > max && max > -1) setVal(max);
                 chart.data.params[param].value = val;
                 picker.attr('aria-valuenow', val);
                 picker.val(val);
                 text.val(val);
                 chart.update();
             }
+
+            setVal(value);
 
             // listeners
             picker.mousedown(function () {
@@ -52,9 +51,7 @@ Chart.register({
                 setVal($(this).val());
             });
             chart.data.params[param].text.change(function () {
-                if ($(this).val() < min) setVal(min);
-                else if ($(this).val() > max && maxEnabled) setVal(max);
-                else setVal($(this).val());
+                setVal($(this).val());
             });
         }
     },

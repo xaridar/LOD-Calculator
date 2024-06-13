@@ -25,24 +25,83 @@
     
     <!-- Meta Tags Generated with https://metatags.io -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF" crossorigin="anonymous"></script>
+    <!-- PWA -->
+    <link rel="manifest" href="/static/manifest.json" />
+    <!-- ios support -->
+    <!-- <link rel="apple-touch-icon" href="images/icons/icon-72x72.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-96x96.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-128x128.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-144x144.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-152x152.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-384x384.png" />
+    <link rel="apple-touch-icon" href="images/icons/icon-512x512.png" /> -->
+    <meta name="apple-mobile-web-app-status-bar" content="#0d6efd" />
+    <meta name="theme-color" content="#0d6efd" />
+
+    <script rel="preconnect" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script rel="preconnect" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script rel="preconnect" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" integrity="sha384-QuGBSgV5Im3DzL2z+8Ko9/hqNy/N0O7zwvXAtfd1MvPKWa/UbeLV65cfm4BV5Wgq" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/styles.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="pt-4 p-lg-4">
-    <label for="darkModeCheck" style="cursor: pointer" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
-        <input aria-label="Toggle Dark Mode" id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox">
-        <span id="check" class="position-absolute top-0 bottom-0 z-1 bg-primary opacity-50"></span>
-        <span id="lightMode" class="bi bi-sun-fill z-2"></span>
-        <span id="darkMode" class="bi bi-moon-fill z-2"></span>
-    </label>
+<body class="pt-4 p-lg-4" onresize="resize()" onhashchange="checkPath()">
+    <div class="d-flex justify-content-end">
+        <label for="darkModeCheck" style="cursor: pointer" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
+            <input aria-label="Toggle Dark Mode" id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox"
+                onchange="setDarkMode(checked)" onfocus="parentElement.classList.add('focus')" onfocusout="parentElement.classList.remove('focus')">
+            <span id="check" class="position-absolute top-0 bottom-0 z-1 bg-primary opacity-50"></span>
+            <span id="lightMode" class="bi bi-sun-fill z-2"></span>
+            <span id="darkMode" class="bi bi-moon-fill z-2"></span>
+        </label>
+    </div>
     <div class="d-flex flex-column align-items-center justify-content-center">
         {% block content %}{% endblock %}
     </div>
+    <div id="help" class="z-2 position-absolute hidden overflow-hidden" onclick="if (event.target !== this) return;$('#help').addClass('hidden');" style="inset:0;background-color: rgba(36, 40, 51, 0.85);">
+        <div class="rounded-3 w-75 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto" style="top:5%;bottom:5%;background-color: var(--bs-secondary-bg-subtle);">
+            <h1 class="text-center">LOD Calculator</h1>
+            <div class="mt-4">
+                <p>This application allows calculation of Limits of Detection (LOD) for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
+                <h2>Parameters</h2>
+                <p>
+                    The LOD Calculator uses 4 parameters to calculate LOD:
+                    <ul>
+                        <li>Coefficent of Variation (CV)</li>
+                        <li>Type II Error Rate (&beta;)</li>
+                        <li>Number of Independent Experiments (n)</li>
+                        <li>Dilution Factor (k)</li>
+                    </ul>
+                    Each of these parameters affects the LOD calculation.
+                </p>
+                <h2>Operation</h2>
+                <p>The calculator supports two modes: Graph Mode and Discrete Calculation Mode:</p>
+                <h3>Graph Mode</h3>
+                <p>
+                    Graph Mode can be accessed by selecting any of the listed parameters to be displayed as the independent variable on the graph.<br><br>
+                    All other available parameters will become visibly accessible to be modified as desired, within a given range.<br>
+                    Altering the value of any variable will dynamically update the graphical view, allowing for live updates to the graph.<br>
+                    Variables can be changed via sliders with discrete values, or by entering values in the corresponding boxes.<br>
+                    The resulting graph will graph the chosen x variable against the calculated LOD per mL, with all other parameter values being statically set to those chosen values.
+                </p>
+                <h3>Discrete Calculation Mode</h3>
+                <p>
+                    Discrete Calculation Mode can be accessed by selecting "Calculate Discrete Value".<br><br>
+                    In this mode, any values can be input for the 4 previously mentioned parameters for an experiment.<br>
+                    The last box will show the LOD value given these parameter values.
+                </p>
+                <small>App developed by Elliot Topper, in collaboration with David Newton and Julia Sharp at NIST Boulder.</small>
+            </div>
+        </div>
+    </div>
+    <button class="position-fixed end-0 bottom-0 m-5 rounded-circle d-flex align-items-center justify-content-center z-3 btn btn-secondary p-4"
+        style="aspect-ratio: 1/1;" onclick="$('#help').toggleClass('hidden');localStorage.setItem('lod-helpClosed', true);">
+        <div class="d-flex">
+            <div class="bi bi-question-circle lh-1" style="font-size: 32px;"></div>
+        </div>
+    </button>
     <script src="/static/global.js"></script>
 </body>
 </html>

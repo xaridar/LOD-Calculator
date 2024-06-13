@@ -1,14 +1,16 @@
-from flask import Flask, render_template, jsonify, request
-from markupsafe import escape
-import numpy as np
-from werkzeug.utils import secure_filename
-import pandas as pd
-
-from lod import calc_lod
+from flask import Flask, redirect, render_template, request
 
 app = Flask(__name__)
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return redirect('/graph')
+
+@app.route('/graph')
+def cv():
+    return render_template('index.html', render='graph')
+
+@app.route('/calc')
+def calc():
+    return render_template('index.html', render='calc')
