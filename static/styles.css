@@ -2,6 +2,10 @@
     transition: background-color 0.3s ease;
 }
 
+[data-prefers-animation="false"] * {
+    transition: none !important;
+}
+
 body {
     margin-bottom: 5rem;
 }
@@ -14,13 +18,17 @@ input[type="radio"] {
     display: none !important;
 }
 
-.transform-left-50 {
-    transform: translateX(-50%);
+.transform-left-25 {
+    transform: translateX(-25%) !important;
 }
 
-/* HELP */
+.transform-none {
+    transform: none !important;
+}
 
-.help-hidden #help {
+/* INFo */
+
+.info-hidden #info {
     display: none !important;
 }
 

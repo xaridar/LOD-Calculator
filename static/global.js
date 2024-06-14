@@ -1,6 +1,6 @@
 /**
  * global.js handles all logic required for site-wide controls, including
- * dark mode, site help, and service worker registration.
+ * dark mode, site info, and service worker registration.
  * 
  * Created by Elliot Topper, 06/24
  */
@@ -57,21 +57,23 @@ const setDarkMode = (bool) => {
     _setDarkMode();
 }
 
-/* Help controls */
+/* Info controls */
 
-const toggleHelp = () => {
-    $(document.body).toggleClass('help-hidden');
-    localStorage.setItem('lod-helpClosed', true);
-    $('#helpBtn>div').toggleClass('transform-left-50', !$(document.body).hasClass('help-hidden'));
+const toggleInfo = () => {
+    $(document.body).toggleClass('info-hidden');
+    localStorage.setItem('lod-infoClosed', true);
+    $('#infoBtn>div').toggleClass('transform-left-25', !$(document.body).hasClass('info-hidden'));
+    $('#buttonPopup').toggleClass('transform-none');
+    $('#buttonPopup p').toggleClass('hidden');
 }
 
-// shows help page on load if site has not been loaded before
-if (!localStorage.getItem('lod-helpClosed')) $(document.body).removeClass('help-hidden');
+// shows info page on load if site has not been loaded before
+if (!localStorage.getItem('lod-infoClosed')) toggleInfo();
 
-// registers escape key to toggle help page
+// registers escape key to toggle info page
 $(document).keydown((e) => {
     if (e.code == 'Escape') {
-        toggleHelp();
+        toggleInfo();
     }
 });
 

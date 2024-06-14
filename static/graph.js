@@ -10,6 +10,7 @@ let xVar = '';
 let shortXVar = false;
 let maxEnabled = true;
 const scale = [];
+let anim = true;
 
 // LOD function, as defined in Sharp, Parker, and Hamilton (2024) (https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub)
 const lod = ({cv, beta, n, k}) => {
@@ -93,7 +94,7 @@ const chart = new Chart(ctx, {
                 },
             },
         },
-        animation: true,
+        animation: anim,
     },
 });
 // deafult options to specify text font
@@ -125,8 +126,25 @@ const setX = (newX) => {
     // update chart
     chart.options.animation = false;
     chart.update();
-    chart.options.animation = true;
+    if (anim) chart.options.animation = true;
 }
+
+// turns on or off animation for accessibility
+const toggleAnim = (newAnim = !anim) => {
+    if (anim != newAnim) {
+        localStorage.setItem('lod-animation', newAnim);
+        chart.options.animation = newAnim;
+        $('html')[0].dataset.prefersAnimation = newAnim;
+        $('#animBtn').toggleClass('btn-success', newAnim);
+        $('#animBtn').toggleClass('btn-danger', !newAnim);
+        $('#animStatus').text(newAnim ? 'On' : 'Off');
+    }
+    anim = newAnim;
+}
+$(document).ready(() => {
+    if (window.matchMedia(`(prefers-reduced-motion: reduce)`).matches) localStorage.setItem('lod-animation', 'false');
+    if (localStorage.getItem('lod-animation') === "false") toggleAnim(false);
+});
 
 // if the window is small enough, replace the label on the X axis with a shortned version
 const resize = () => {

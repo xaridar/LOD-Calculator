@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="/static/styles.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="pt-4 p-lg-4 help-hidden" onhashchange="checkPath()">
+<body class="pt-4 p-lg-4 info-hidden" onhashchange="checkPath()">
     <div class="d-flex justify-content-end">
         <label for="darkModeCheck" style="cursor: pointer" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
             <input aria-label="Toggle Dark Mode" id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox"
@@ -57,8 +57,8 @@
     <div class="d-flex flex-column align-items-center justify-content-center">
         {% block content %}{% endblock %}
     </div>
-    <div id="help" class="z-2 position-fixed" onclick="if (event.target !== this) return;toggleHelp();" style="inset:0;background-color: rgba(36, 40, 51, 0.85);">
-        <div id="modal" class="rounded-3 w-75 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto bg-secondary-subtle" style="top:5%;bottom:calc(5% + 9rem);">
+    <div id="info" class="z-2 position-fixed" onclick="if (event.target !== this) return;toggleInfo();" style="inset:0;background-color: rgba(36, 40, 51, 0.85);">
+        <div id="modal" class="rounded-3 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto bg-secondary-subtle" style="width:85%;top:5%;bottom:calc(5% + 9rem);">
             <h1 class="text-center">LOD Calculator</h1>
             <div class="mt-4">
                 <p>This application allows calculation of Limits of Detection (LOD) for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
@@ -93,17 +93,30 @@
             </div>
         </div>
     </div>
-    <button class="position-fixed end-0 bottom-0 m-5 rounded-circle overflow-hidden justify-content-center z-3 btn btn-secondary p-4"
-        style="width:6rem;height:6rem;font-size: 3rem;" id="helpBtn" onclick="toggleHelp()">
-        <div class="d-flex position-absolute align-items-center justify-content-stretch top-0 bottom-0 start-0 end-0" style="transform:0;width:200%;transition:transform 0.3s cubic-bezier(0.680, -0.550, 0.265, 1.550);">
-            <div class="d-flex flex-fill justify-content-center">
-                <div class="bi bi-info-circle lh-1"></div>
+    <div class="position-fixed end-0 bottom-0 m-5 z-3">
+        <div id="buttonPopup" class="position-absolute bottom-100 start-0 end-0 m-3 d-flex flex-column justify-content-center z-n1" style="transform:translateY(150%);transition: transform 0.3s ease-out;">
+            <span role="button" aria-label="Show/Hide info page" class="rounded-circle d-flex justify-content-center align-items-center overflow-hidden btn btn-success p-3"
+                style="width:4rem;height:4rem;font-size:1.5rem;" id="animBtn" onclick="toggleAnim()">
+                <div class="d-flex align-items-center justify-content-center top-0 bottom-0 start-0 end-0 pe-none">
+                    <div class="d-flex flex-fill justify-content-center">
+                        <span class="bi bi-universal-access lh-1"></span>
+                    </div>
+                </div>
+            </span>
+            <p class="bottom-100 text-center hidden" style="font-size: 14px">Animations: <span id="animStatus">On</span></p>
+        </div>  
+        <span role="button" aria-label="Show/Hide info page" class="rounded-circle d-flex justify-content-center align-items-center overflow-hidden btn btn-secondary p-4"
+            style="width:6rem;height:6rem;font-size:3rem;" id="infoBtn" onclick="toggleInfo()">
+            <div class="d-flex align-items-center justify-content-center top-0 bottom-0 start-0 end-0 pe-none" style="aspect-ratio:2/1;height:6rem;transition:transform 0.3s cubic-bezier(0.680, -0.550, 0.265, 1.550);transform: translateX(25%);">
+                <div class="d-flex flex-fill justify-content-center">
+                    <span class="bi bi-info-circle lh-1"></span>
+                </div>
+                <div class="d-flex flex-fill justify-content-center">
+                    <span class="bi bi-x lh-1"></span>
+                </div>
             </div>
-            <div class="d-flex flex-fill justify-content-center">
-                <div class="bi bi-x lh-1"></div>
-            </div>
-        </div>
-    </button>
+        </span>
+    </div>
     <script src="/static/global.js"></script>
 </body>
 </html>
