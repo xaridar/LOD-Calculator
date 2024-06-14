@@ -1,7 +1,7 @@
 {
     "name": "Limit of Detection Calculator",
     "shortName": "LOD Calculator",
-    "start_url": "/",
+    "start_url": "/graph",
     "display": "standalone",
     "theme_color": "#0d6efd",
     "orientation": "portrait-primary",

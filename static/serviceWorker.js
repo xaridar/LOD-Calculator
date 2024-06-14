@@ -1,13 +1,13 @@
 const assets = [
-    "/static/chartplugin.js",
-    "/static/global.js",
-    "/static/graph.js",
-    "/static/styles.css",
+    "/chartplugin.js",
+    "/global.js",
+    "/graph.js",
+    "/styles.css",
 ];
 
 self.addEventListener('install', installEvent => {
     installEvent.waitUntil(
-        caches.open('lod-calc-v1').then(cache => {
+        caches.open('lod-calc-v3').then(cache => {
             cache.addAll(assets);
         })
     );

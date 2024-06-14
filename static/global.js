@@ -44,17 +44,18 @@ const setDarkMode = (bool) => {
 }
 
 /* Help controls */
-if (!localStorage.getItem('lod-helpClosed')) $('#help').removeClass('hidden');
+if (!localStorage.getItem('lod-helpClosed')) $(document.body).removeClass('help-hidden');
 
 $(document).keydown((e) => {
     if (e.code == 'Escape') {
-        $('#help').toggleClass('hidden');
+        $(document.body).toggleClass('help-hidden');
         localStorage.setItem('lod-helpClosed', true);
     }
 });
 
+/* Service worker */
 if ("serviceWorker" in navigator) {
-    $(window).on("load", () => {
+    $(document).ready(() => {
         navigator.serviceWorker
             .register("/static/serviceWorker.js")
             .then(() => console.log("service worker registered"))
