@@ -6,6 +6,25 @@
     "theme_color": "#0d6efd",
     "orientation": "portrait-primary",
     "icons": [
-        
+        {
+            "src": "images/icon-96x96.png",
+            "sizes": "96x96"
+        },
+        {
+            "src": "images/icon-128x128.png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "images/icon-144x144.png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "images/icon-384x384.png",
+            "sizes": "384x384"
+        },
+        {
+            "src": "images/icon-512x512.png",
+            "sizes": "512x512"
+        }
     ]
 }

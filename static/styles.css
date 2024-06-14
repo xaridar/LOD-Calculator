@@ -2,12 +2,20 @@
     transition: background-color 0.3s ease;
 }
 
-.hidden {
-    display: none !important;
+body {
+    margin-bottom: 5rem;
 }
 
 input[type="radio"] {
     appearance: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.transform-left-50 {
+    transform: translateX(-50%);
 }
 
 /* HELP */
@@ -75,5 +83,8 @@ label[for="darkModeCheck"] {
 @media screen and (min-width: 576px) {
     label[for="darkModeCheck"] {
         margin-inline: auto;
+    }
+    #modal {
+        bottom: 5% !important;
     }
 }

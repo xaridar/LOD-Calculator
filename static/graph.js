@@ -1,9 +1,17 @@
+/**
+ * graph.js creates a Chart.js object and manages selection of parameters
+ * and discrete calculation.
+ * 
+ * Created by Elliot Topper, 06/24
+ */
+
 // Global variables
 let xVar = '';
 let shortXVar = false;
 let maxEnabled = true;
 const scale = [];
 
+// LOD function, as defined in Sharp, Parker, and Hamilton (2024) (https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub)
 const lod = ({cv, beta, n, k}) => {
     if (cv === 0) return -Math.log(beta) / (n * k);
     else {
@@ -13,6 +21,8 @@ const lod = ({cv, beta, n, k}) => {
 }
 
 // Create Chart.js chart
+// Defines use of LOD function for graphing and parameters for use with 'function-params' plugin (defined in chartplugin.js)
+// Additionally, options are specified to style graph properly
 const ctx = $('#chart')[0].getContext('2d');
 const chart = new Chart(ctx, {
     type: 'line',
@@ -70,6 +80,12 @@ const chart = new Chart(ctx, {
                     display: true,
                     text: 'LOD per mL',
                 },
+                ticks: {
+                    callback: (tick) => {
+                        if (tick > 9_999_999) return Number(tick).toExponential(1);
+                        return tick;
+                    }
+                },
             },
             x: {
                 title: {
@@ -80,13 +96,14 @@ const chart = new Chart(ctx, {
         animation: true,
     },
 });
-
+// deafult options to specify text font
 Chart.defaults.font.size = 16;
 Chart.defaults.font.family = 'monospace';
 
-
+// sets the independent variable on the graph when selected by the user
 const setX = (newX) => {
-    if (!['cv', 'beta', 'n', 'k'].includes(newX) || !maxEnabled) return;
+    // only allows valid parameter names
+    if (!['cv', 'beta', 'n', 'k'].includes(newX)) return;
     xVar = newX;
     
     // toggle active button
@@ -111,12 +128,15 @@ const setX = (newX) => {
     chart.options.animation = true;
 }
 
+// if the window is small enough, replace the label on the X axis with a shortned version
 const resize = () => {
     shortXVar = (window.innerWidth < 375);
     setX(xVar);
 }
+$(window).on('resize', resize);
 resize();
 
+// sets the X scale for chart recalculation
 const setScale = (min, max, step) => {
     // clears scale
     scale.length = 0;
@@ -127,23 +147,27 @@ const setScale = (min, max, step) => {
     }
 }
 
+// calculates the LOD value based on the current paramters
 const calcVal = () => {
     const params = JSON.parse(JSON.stringify(chart.data.params));
     for (const x in params) params[x] = +params[x].value;
     const lodVal = lod(params);
+    // formats LOD and inserts into text box
     $('#lod-text').val(new Intl.NumberFormat('en-US').format(
         lodVal,
     ));
 }
 
+// listener for any value change
 $(`[id$="-text"], [id$="-slider"]`).change(function () {
     // save parameter values to localStorage for data persistence
     localStorage.setItem(`lod-param-${$(this).attr('id').split('-')[0]}`, $(this).val());
-
+    // recalculte LOD
     calcVal();
 });
 calcVal();
 
+// called whenever the address hash changes; sets X parameter based on hash
 const checkPath = () => {
     if (window.location.pathname == '/calc') return;
     const hash = window.location.hash;

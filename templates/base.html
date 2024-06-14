@@ -28,14 +28,11 @@
     <!-- PWA -->
     <link rel="manifest" href="/static/manifest.json" />
     <!-- ios support -->
-    <!-- <link rel="apple-touch-icon" href="images/icons/icon-72x72.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-96x96.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-128x128.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-144x144.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-152x152.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-384x384.png" />
-    <link rel="apple-touch-icon" href="images/icons/icon-512x512.png" /> -->
+    <link rel="apple-touch-icon" href="static/images/icon-96x96.png" />
+    <link rel="apple-touch-icon" href="static/images/icon-128x128.png" />
+    <link rel="apple-touch-icon" href="static/images/icon-144x144.png" />
+    <link rel="apple-touch-icon" href="static/images/icon-384x384.png" />
+    <link rel="apple-touch-icon" href="static/images/icon-512x512.png" />
     <meta name="apple-mobile-web-app-status-bar" content="#0d6efd" />
     <meta name="theme-color" content="#0d6efd" />
 
@@ -47,7 +44,7 @@
     <link rel="stylesheet" href="/static/styles.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body class="pt-4 p-lg-4 help-hidden" onresize="resize()" onhashchange="checkPath()">
+<body class="pt-4 p-lg-4 help-hidden" onhashchange="checkPath()">
     <div class="d-flex justify-content-end">
         <label for="darkModeCheck" style="cursor: pointer" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
             <input aria-label="Toggle Dark Mode" id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox"
@@ -60,10 +57,8 @@
     <div class="d-flex flex-column align-items-center justify-content-center">
         {% block content %}{% endblock %}
     </div>
-    <div data-closable id="help" class="z-2 position-absolute" onclick="if (event.target !== this) return;$(document.body).addClass('help-hidden');" style="inset:0;background-color: rgba(36, 40, 51, 0.85);">
-        <button id="closeBtn" class="d-none d-sm-block position-absolute end-0 top-0 m-3 border-0 bg-transparent p-0 lh-1 text-bg-dark"
-            style="width:4rem;aspect-ratio:1/1;font-size:4rem;" aria-label="Close Button" type="button" onclick="$(document.body).removeClass('help-hidden');localStorage.setItem('lod-helpClosed', true);"><span class="bi bi-x"></span></button>
-        <div class="rounded-3 w-75 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto bg-secondary-subtle" style="top:5%;bottom:5%;">
+    <div id="help" class="z-2 position-fixed" onclick="if (event.target !== this) return;toggleHelp();" style="inset:0;background-color: rgba(36, 40, 51, 0.85);">
+        <div id="modal" class="rounded-3 w-75 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto bg-secondary-subtle" style="top:5%;bottom:calc(5% + 9rem);">
             <h1 class="text-center">LOD Calculator</h1>
             <div class="mt-4">
                 <p>This application allows calculation of Limits of Detection (LOD) for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
@@ -98,10 +93,15 @@
             </div>
         </div>
     </div>
-    <button class="position-fixed end-0 bottom-0 m-5 rounded-circle d-flex align-items-center justify-content-center z-3 btn btn-secondary p-4"
-        style="aspect-ratio: 1/1;" onclick="$(document.body).toggleClass('help-hidden');localStorage.setItem('lod-helpClosed', true);">
-        <div class="d-flex">
-            <div class="bi bi-info-circle lh-1" style="font-size: 32px;"></div>
+    <button class="position-fixed end-0 bottom-0 m-5 rounded-circle overflow-hidden justify-content-center z-3 btn btn-secondary p-4"
+        style="width:6rem;height:6rem;font-size: 3rem;" id="helpBtn" onclick="toggleHelp()">
+        <div class="d-flex position-absolute align-items-center justify-content-stretch top-0 bottom-0 start-0 end-0" style="transform:0;width:200%;transition:transform 0.3s cubic-bezier(0.680, -0.550, 0.265, 1.550);">
+            <div class="d-flex flex-fill justify-content-center">
+                <div class="bi bi-info-circle lh-1"></div>
+            </div>
+            <div class="d-flex flex-fill justify-content-center">
+                <div class="bi bi-x lh-1"></div>
+            </div>
         </div>
     </button>
     <script src="/static/global.js"></script>

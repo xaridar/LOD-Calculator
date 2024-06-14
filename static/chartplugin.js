@@ -1,3 +1,11 @@
+/**
+ * chartplugin.js registers a plugin 'function-params' with Chart.js.
+ * This plugin registers listeners for each parameter specified on initialization,
+ * and replaces discrete chart data with function call capabilities.
+ * Listeners will re-update the graph on any parameter update, which will call a specified function using said params and a given X value.
+ * 
+ * Created by Elliot Topper, 06/24
+ */
 Chart.register({
     id: 'function-params',
     beforeInit: (chart) => {
@@ -24,6 +32,7 @@ Chart.register({
             // set initial values
             chart.data.params[param].mousedown = false;
 
+            // setVal does all necessary setting of values on all components, then updates the chart
             const setVal = (val) => {
                 if (val < min) setVal(min);
                 else if (val > max && max > -1) setVal(max);
@@ -60,9 +69,10 @@ Chart.register({
         const params = JSON.parse(JSON.stringify(data.params));
         for (const x in params) params[x] = +params[x].value;
         for (let i = 0; i < data.datasets.length; i++) {
+            if (data.datasets[i].function == null) continue;
+            // for each dataset, call the function on each x value using the current parameter values
             data.datasets[i].data = [];
             for (let j = 0; j < data.labels.length; j++) {
-                if (data.datasets[i].function == null) continue;
                 const f = data.datasets[i].function,
                     x = data.labels[j],
                     y = f(params, x);
