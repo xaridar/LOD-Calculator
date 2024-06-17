@@ -137,7 +137,10 @@ const toggleAnim = (newAnim = !anim) => {
         $('html')[0].dataset.prefersAnimation = newAnim;
         $('#animBtn').toggleClass('btn-success', newAnim);
         $('#animBtn').toggleClass('btn-danger', !newAnim);
-        $('#animStatus').text(newAnim ? 'On' : 'Off');
+        $('#animPause').toggleClass('hidden', newAnim);
+        $('#animPlay').toggleClass('hidden', !newAnim);
+        $('#animBtn').attr('data-bs-original-title', `Animations: ${newAnim ? 'On' : 'Off'}`);
+        bootstrap.Tooltip.getInstance($('#animBtn')[0]).hide();
     }
     anim = newAnim;
 }

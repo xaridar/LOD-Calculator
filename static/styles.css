@@ -10,6 +10,10 @@ body {
     margin-bottom: 5rem;
 }
 
+body:not(.info-hidden) {
+    overflow: hidden;
+}
+
 input[type="radio"] {
     appearance: none;
 }
