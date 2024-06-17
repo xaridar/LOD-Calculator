@@ -5,13 +5,13 @@
     <div class="d-flex flex-column mx-2">
         <label for="xVar" class="text-center w-100 mb-2 fs-5 mt-3">X Axis (Independent) Variable</label>
         <div class="btn-group" role="group" aria-label="X Parameter" data-toggle="buttons">
-            <a href="/graph#cv" id="btn-param-cv" class="btn btn-outline-primary" aria-label="Coefficient of Variation">CV</a>
-            <a href="/graph#beta" id="btn-param-beta" class="btn btn-outline-primary" aria-label="Type II Error Rate">&beta;</a>
-            <a href="/graph#n" id="btn-param-n" class="btn btn-outline-primary" aria-label="Number of Independent Experiments">n</a>
-            <a href="/graph#k" id="btn-param-k" class="btn btn-outline-primary" aria-label="Dilution Factor">k</a>
+            <a data-bs-toggle="tooltip" href="/graph#cv" id="btn-param-cv" class="btn btn-outline-primary" title="Change X axis to Coefficient of Variation">CV</a>
+            <a data-bs-toggle="tooltip" href="/graph#beta" id="btn-param-beta" class="btn btn-outline-primary" title="Change X axis to Type II Error Rate">&beta;</a>
+            <a data-bs-toggle="tooltip" href="/graph#n" id="btn-param-n" class="btn btn-outline-primary" title="Change X axis to Number of Independent Experiments">n</a>
+            <a data-bs-toggle="tooltip" href="/graph#k" id="btn-param-k" class="btn btn-outline-primary" title="Change X axis to Dilution Factor">k</a>
         </div>
     </div>
-    <a href="/calc" id="btn-param-calc" class="btn btn-outline-primary {{'active' if render == 'calc'}}">Calculate Discrete Value</a>
+    <a data-bs-toggle="tooltip" href="/calc" id="btn-param-calc" class="btn btn-outline-primary {{'active' if render == 'calc'}}" title="View Discrete Calculation Mode">Calculate Discrete Value</a>
 </div>
 <div class="d-flex flex-lg-row align-items-center gap-4 m-4 container justify-content-center flex-column">
     <div class="w-100 {{'hidden' if render == 'calc'}}">

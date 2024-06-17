@@ -80,7 +80,11 @@ $(document).keydown((e) => {
 // initializes tooltips
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl);
+    const tt = new bootstrap.Tooltip(tooltipTriggerEl);
+    tooltipTriggerEl.addEventListener('click', function() {
+        tt.hide();
+    });
+    return tt;
 });
 
 /* Service worker */

@@ -140,7 +140,6 @@ const toggleAnim = (newAnim = !anim) => {
         $('#animPause').toggleClass('hidden', newAnim);
         $('#animPlay').toggleClass('hidden', !newAnim);
         $('#animBtn').attr('data-bs-original-title', `Animations: ${newAnim ? 'On' : 'Off'}`);
-        bootstrap.Tooltip.getInstance($('#animBtn')[0]).hide();
     }
     anim = newAnim;
 }
