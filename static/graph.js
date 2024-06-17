@@ -66,7 +66,7 @@ const chart = new Chart(ctx, {
             tooltip: {
                 callbacks: {
                     title: t => {
-                        return `(${t[0].label}, ${t[0].formattedValue})`;
+                        return `${$(`#btn-param-${xVar}`).text()}: ${t[0].label}\nLOD: ${t[0].formattedValue}`;
                     },
                     label: () => {
                         return null;
@@ -192,7 +192,7 @@ const checkPath = () => {
     if (['#cv', '#beta', '#n', '#k'].includes(hash)) {
         setX(hash.split('#')[1]);
     } else if (!hash) {
-        setX('n');
+        setX('cv');
     }
 }
 
