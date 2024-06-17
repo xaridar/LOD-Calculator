@@ -59,16 +59,26 @@ const setDarkMode = (bool) => {
 
 /* Info controls */
 
-const toggleInfo = () => {
+const toggleInfo = (close = true) => {
     $(document.body).toggleClass('info-hidden');
-    localStorage.setItem('lod-infoClosed', true);
+    if (close) localStorage.setItem('lod-infoClosed', true);
     $('#infoBtn>div').toggleClass('transform-left-25', !$(document.body).hasClass('info-hidden'));
     $('#buttonPopup').toggleClass('transform-none');
-    $('#buttonPopup p').toggleClass('hidden');
+    $('#buttonPopup').toggleClass('hidden');
 }
 
+let lastElem;
+
+$('#info').mousedown(function (e) {
+    lastElem = e.target;
+});
+
+$('#info').mouseup(function (e) {
+    if (lastElem === e.target && lastElem === this) toggleInfo();
+});
+
 // shows info page on load if site has not been loaded before
-if (!localStorage.getItem('lod-infoClosed')) toggleInfo();
+if (!localStorage.getItem('lod-infoClosed')) toggleInfo(false);
 
 // registers escape key to toggle info page
 $(document).keydown((e) => {
