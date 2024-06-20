@@ -8,12 +8,16 @@
 // Global variables
 let xVar = '';
 let shortXVar = false;
-let maxEnabled = true;
 const scale = [];
 let anim = true;
+let meanMode = false;
 
 // LOD function, as defined in Sharp, Parker, and Hamilton (2024) (https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub)
-const lod = ({cv, beta, n, k}) => {
+const lod = (params) => {
+    const { beta, n, k } = params;
+    let cv;
+    if (!meanMode) cv = params.cv;
+    else cv = params.mean / params.sd;
     if (cv === 0) return -Math.log(beta) / (n * k);
     else {
         const d = 1 / Math.pow(cv, 2);
@@ -42,6 +46,12 @@ const chart = new Chart(ctx, {
             k: {
                 ctr: $('#k-ctr'),
             },
+            mean: {
+                ctr: $('#mean-ctr'),
+            },
+            sd: {
+                ctr: $('#sd-ctr'),
+            },
         },
         datasets: [
             {
@@ -66,7 +76,9 @@ const chart = new Chart(ctx, {
             tooltip: {
                 callbacks: {
                     title: t => {
-                        return `${$(`#btn-param-${xVar}`).text()}: ${t[0].label}\nLOD: ${t[0].formattedValue}`;
+                        let formattedVal = Math.round(t[0].raw.y * 100) / 100;
+                        if (Math.abs(formattedVal) > 99_999) formattedVal = Number(formattedVal).toExponential(1);
+                        return `${$(`#btn-param-${xVar}`).text()}: ${t[0].raw.x}\nLOD: ${formattedVal}`;
                     },
                     label: () => {
                         return null;
@@ -104,7 +116,7 @@ Chart.defaults.font.family = 'monospace';
 // sets the independent variable on the graph when selected by the user
 const setX = (newX) => {
     // only allows valid parameter names
-    if (!['cv', 'beta', 'n', 'k'].includes(newX)) return;
+    if (!['cv', 'beta', 'n', 'k', 'mean', 'sd'].includes(newX)) return;
     xVar = newX;
     
     // toggle active button
@@ -117,7 +129,7 @@ const setX = (newX) => {
     ctr.toggleClass('hidden', true);
 
     // update x scale
-    setScale(+ctr[0].dataset.min, +ctr[0].dataset.max, +ctr[0].dataset.step);
+    setScale(+ctr[0].dataset.min || 0, +ctr[0].dataset.max || 100, +ctr[0].dataset.step);
 
     // set label text accordingly
     if (shortXVar) chart.options.scales.x.title.text = $(`#btn-param-${ctr.find('input').attr('id').split('-slider')[0]}`).text();
@@ -191,7 +203,7 @@ calcVal();
 const checkPath = () => {
     if (window.location.pathname == '/calc') return;
     const hash = window.location.hash;
-    if (['#cv', '#beta', '#n', '#k'].includes(hash)) {
+    if (['#beta', '#n', '#k', '#cv', '#mean', '#sd'].includes(hash)) {
         setX(hash.split('#')[1]);
     } else if (!hash) {
         setX('cv');
@@ -214,10 +226,24 @@ const setPlated = (plated) => {
     setX(xVar);
 
     // if k was the current view, reset to default
-    if (plated && window.location.hash === '#k') {
+    if (plated && xVar === 'k') {
         window.location.hash = '';
     }
 }
 
-// set switch based on persistent value
+const setMeanMode = (mm) => {
+    localStorage.setItem('lod-mean-mode', mm);
+    meanMode = mm;
+    // disable unused parameters
+    $('#cv-ctr, #btn-param-cv').toggleClass('disabled', meanMode);
+    $('#btn-param-cv').attr('tabindex', +mm * -1);
+    $('#mean-sd-ctr, #btn-param-mean, #btn-param-sd').toggleClass('disabled', !meanMode);
+    $('#btn-param-mean, #btn-param-sd').attr('tabindex', +!mm * -1);
+
+    if (xVar === 'cv' && mm) window.location.hash = '#mean';
+    if ((xVar === 'mean' || xVar === 'sd') && !mm) window.location.hash = '#cv';
+}
+
+// set switches based on persistent values
 if (localStorage.getItem('lod-plated') === "true") $('#platedSwitch').attr('checked', false).change();
+$('#cvSwitch').attr('checked', localStorage.getItem('lod-mean-mode') === "true").change();

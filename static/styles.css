@@ -58,6 +58,7 @@ input[type="radio"] {
     text-align: center;
     position: relative;
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .number-input::-webkit-outer-spin-button,

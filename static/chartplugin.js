@@ -34,7 +34,7 @@ Chart.register({
 
             // setVal does all necessary setting of values on all components, then updates the chart
             const setVal = (val) => {
-                if (val < min) setVal(min);
+                if (min !== undefined && val < min) setVal(min);
                 else if (val > max && max > -1) setVal(max);
                 chart.data.params[param].value = val;
                 picker.attr('aria-valuenow', val);
