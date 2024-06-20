@@ -182,7 +182,7 @@ const calcVal = () => {
 $(`[id$="-text"], [id$="-slider"]`).change(function () {
     // save parameter values to localStorage for data persistence
     localStorage.setItem(`lod-param-${$(this).attr('id').split('-')[0]}`, $(this).val());
-    // recalculte LOD
+    // recalculate LOD
     calcVal();
 });
 calcVal();
@@ -199,3 +199,25 @@ const checkPath = () => {
 }
 
 checkPath();
+
+// listener for setting the calculated LOD to return sample data, instead of population data,
+// or vice versa
+const setPlated = (plated) => {
+    // disable k parameter
+    $('#k-ctr, #btn-param-k').toggleClass('disabled', plated);
+    $('#btn-param-k').attr('tabindex', +plated * -1);
+    // set k to 1 (for sample calculation)
+    chart.data.params.k.value = plated ? 1 : $('#k-slider').val();
+    // save plated value to localStorage for data persistence
+    localStorage.setItem(`lod-plated`, plated);
+    calcVal();
+    setX(xVar);
+
+    // if k was the current view, reset to default
+    if (plated && window.location.hash === '#k') {
+        window.location.hash = '';
+    }
+}
+
+// set switch based on persistent value
+if (localStorage.getItem('lod-plated') === "true") $('#platedSwitch').attr('checked', false).change();

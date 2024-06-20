@@ -8,7 +8,7 @@ def index():
     return redirect('/graph')
 
 @app.route('/graph')
-def cv():
+def graph():
     return render_template('index.html', render='graph')
 
 @app.route('/calc')

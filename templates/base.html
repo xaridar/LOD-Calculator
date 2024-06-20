@@ -49,7 +49,7 @@
 </head>
 <body class="pt-4 p-lg-4 info-hidden" onhashchange="checkPath()">
     <div class="d-flex justify-content-end">
-        <label data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle Dark/Light Mode" for="darkModeCheck" style="cursor: pointer" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
+        <label role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Toggle Dark/Light Mode" for="darkModeCheck" class="card d-flex justify-content-around flex-row gap-5 form-switch px-3 py-1 position-relative top-0 start-0 align-items-center">
             <input id="darkModeCheck" style="appearance: none;" class="position-absolute " type="checkbox"
                 onchange="setDarkMode(checked)" onfocus="parentElement.classList.add('focus')" onfocusout="parentElement.classList.remove('focus')">
             <span id="check" class="position-absolute top-0 bottom-0 z-1 bg-primary opacity-50"></span>

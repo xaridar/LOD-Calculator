@@ -22,6 +22,10 @@ input[type="radio"] {
     display: none !important;
 }
 
+[id$="tr"].disabled {
+    display: none !important;
+}
+
 .transform-left-25 {
     transform: translateX(-25%) !important;
 }
