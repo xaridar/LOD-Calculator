@@ -11,6 +11,8 @@ let shortXVar = false;
 const scale = [];
 let anim = true;
 let meanMode = false;
+let plated = false;
+let formattedLOD = 0;
 
 // LOD function, as defined in Sharp, Parker, and Hamilton (2024) (https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub)
 const lod = (params) => {
@@ -184,10 +186,9 @@ const calcVal = () => {
     const params = JSON.parse(JSON.stringify(chart.data.params));
     for (const x in params) params[x] = +params[x].value;
     const lodVal = lod(params);
+    formattedLOD = new Intl.NumberFormat('en-US').format(lodVal);
     // formats LOD and inserts into text box
-    $('#lod-text').val(new Intl.NumberFormat('en-US').format(
-        lodVal,
-    ));
+    $('#lod-text').val(formattedLOD);
 }
 
 // listener for any value change
@@ -206,7 +207,7 @@ const checkPath = () => {
     if (['#beta', '#n', '#k', '#cv', '#mean', '#sd'].includes(hash)) {
         setX(hash.split('#')[1]);
     } else if (!hash) {
-        setX('cv');
+        setX(meanMode ? 'mean' : 'cv');
     }
 }
 
@@ -214,34 +215,133 @@ checkPath();
 
 // listener for setting the calculated LOD to return sample data, instead of population data,
 // or vice versa
-const setPlated = (plated) => {
+const setPlated = (p) => {
     // disable k parameter
-    $('#k-ctr, #btn-param-k').toggleClass('disabled', plated);
-    $('#btn-param-k').attr('tabindex', +plated * -1);
+    $('#k-ctr, #btn-param-k').toggleClass('disabled', p);
+    $('#btn-param-k').attr('tabindex', +p * -1);
     // set k to 1 (for sample calculation)
-    chart.data.params.k.value = plated ? 1 : $('#k-slider').val();
+    chart.data.params.k.value = p ? 1 : $('#k-slider').val();
     // save plated value to localStorage for data persistence
-    localStorage.setItem(`lod-plated`, plated);
+    localStorage.setItem('lod-plated', p);
     calcVal();
     setX(xVar);
+    plated = p;
 
     // if k was the current view, reset to default
-    if (plated && xVar === 'k') {
+    if (p && xVar === 'k') {
         window.location.hash = '';
     }
 }
 
+// listener for switching between mean/sd and cv (mean/sd)
 const setMeanMode = (mm) => {
+    // save switch value to localStorage for data persistence
     localStorage.setItem('lod-mean-mode', mm);
     meanMode = mm;
     // disable unused parameters
     $('#cv-ctr, #btn-param-cv').toggleClass('disabled', meanMode);
     $('#btn-param-cv').attr('tabindex', +mm * -1);
-    $('#mean-sd-ctr, #btn-param-mean, #btn-param-sd').toggleClass('disabled', !meanMode);
+    $('#mean-sd-ctr, #mean-sd-ctr>div, #btn-param-mean, #btn-param-sd').toggleClass('disabled', !meanMode);
     $('#btn-param-mean, #btn-param-sd').attr('tabindex', +!mm * -1);
+    
+    calcVal();
+    setX(xVar);
 
+    // change the current graph view if it is disabled
     if (xVar === 'cv' && mm) window.location.hash = '#mean';
     if ((xVar === 'mean' || xVar === 'sd') && !mm) window.location.hash = '#cv';
+}
+
+// defines fonts for use in PDF output
+const fonts = {
+    'Roboto Mono': {
+        normal: `${window.location.protocol}//${window.location.host}/static/fonts/RobotoMono-Regular.ttf`,
+        bold: `${window.location.protocol}//${window.location.host}/static/fonts/RobotoMono-Bold.ttf`,
+    }
+};
+
+// generates and downloads a PDF report reflecting the inputs and output at the time of generation
+const genReport = () => {
+    // first, define pdfMake objects for each visible parameter
+    params = $('[id$="-ctr"]:not(.disabled):not(.hidden)>[id$="-label"]').map((i, label) => {
+        const p = label.id.split('-label')[0];
+        return {
+            text: [
+                {
+                    text: `${label.textContent}: `,
+                    bold: true,
+                }, chart.data.params[p].value
+            ]
+        }
+    });
+    // pdfMake uses a document definition object to specify PDF contents
+    // each line is present with appropriate styling
+    const docDefinition = {
+        content: [
+            {
+                text: 'LOD Calculator', style: 'header', margin: [0, 5]
+            },
+            {
+                text: 'Parameter Values', style: 'subheading',
+            },
+            ...params,
+            {
+                text: [
+                    {
+                        text: 'Limit of Detection (LOD) per mL: ', bold: true,
+                    }, formattedLOD,
+                ], style: 'larger', margin: [0, 5, 0, 0],
+            },
+            {
+                text: plated ? 'Calculated for a diluted sample (k=1)' : `Calculated for a ${plated ? 'diluted sample (k=1)' : 'population pre-dilution'}`,
+                fontSize: 12,
+            }
+        ],
+        defaultStyle: {
+            font: 'Roboto Mono',
+            lineHeight: 1.25,
+        },
+        styles: {
+            header: {
+                fontSize: 35,
+                bold: true,
+                alignment: 'center',
+            },
+            subheading: {
+                fontSize: 24,
+                bold: true,
+            },
+            larger: {
+                fontSize: 20
+            },
+            link: {
+                color: 'blue',
+                decoration: 'underline'
+            },
+        },
+        info: {
+            title: `LOD Calulator Output - ${new Date().toLocaleDateString()}`,
+            keywords: 'LOD, limits of detection',
+        },
+        footer: {
+            text: [
+                'Generated on ',
+                new Date() .toLocaleString(),
+                ' using ',
+                {
+                    text: 'pdfMake',
+                    link: 'http://pdfmake.org/',
+                    style: 'link'
+                },
+            ],
+            fontSize: 10,
+            margin: 10
+        }
+    };
+    // the docDefinition and fonts are passed to createPdf() to generate a PDF
+    const pdf = pdfMake.createPdf(docDefinition, null, fonts);
+    // generated PDF is automatically downloaded
+    pdf.download('lod-output.pdf');
 }
 
 // set switches based on persistent values

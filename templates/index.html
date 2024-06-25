@@ -17,7 +17,7 @@
 </div>
 <div class="m-4 d-flex gap-4">
     <div class="float-end form-check form-switch">
-        <label class="form-check-label" for="platedSwitch">Plated (sample) LOD</label>
+        <label class="form-check-label" for="platedSwitch">Sample LOD</label>
         <input type="checkbox" id="platedSwitch" checked onchange="setPlated(!this.checked)" data-bs-toggle="tooltip" title="Toggle calculated LOD" role="switch" class="form-check-input" style="float:none;margin-inline:0.5em">
         <label class="form-check-label" for="platedSwitch">Diluted (population) LOD</label>
     </div>
@@ -27,7 +27,7 @@
         <label class="form-check-label" for="cvSwitch">&mu;/&sigma; Mode</label>
     </div>
 </div>
-<div class="d-flex flex-lg-row align-items-center gap-4 container justify-content-center flex-column">
+<div id="content" class="d-flex flex-lg-row align-items-center gap-4 container justify-content-center flex-column">
     <div class="w-100 {{'hidden' if render == 'calc'}}">
         <canvas id="chart" width="500" height="500"></canvas>
     </div>
@@ -67,6 +67,9 @@
         <div class="d-grid gap-2 form-group w-100 {{'hidden' if render != 'calc'}}" style="margin-top: 5rem" id="lod-results">
             <label for="lod-text" class="h4">Limit of Detection (LOD) per mL</label>
             <input class="text form-control" id="lod-text" type="text" disabled>
+            <div class="d-flex mt-3">
+                <button class="btn btn-primary m-auto" data-bs-toggle="tooltip" title="Generate and Download Report" onclick="genReport()">Download Report</button>
+            </div>
         </div>
     </div>
 </div>

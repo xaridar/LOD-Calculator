@@ -36,12 +36,15 @@
     <link rel="apple-touch-icon" href="static/images/icon-512x512.png" />
     <meta name="apple-mobile-web-app-status-bar" content="#0d6efd" />
     <meta name="theme-color" content="#0d6efd" />
+    
 
-    <!-- External resources: Popper.js, Bootstrap, jQuery, Chart.js, Bootstrap Icons -->
+    <!-- External resources: pdfMake, Popper.js, Bootstrap, jQuery, Chart.js, Bootstrap Icons -->
+    <script rel="preconnect" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" integrity="sha512-w61kvDEdEhJPJLSAJpuL+RWp1+zTBUUpgPaP+6pcqCk78wQkOaExjnGWrVbovojeisWGQS7XZKz+gr3L+GPYLg==" crossorigin="anonymous"></script>
     <script rel="preconnect" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script rel="preconnect" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
     <script rel="preconnect" src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script rel="preconnect" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" integrity="sha384-JUh163oCRItcbPme8pYnROHQMC6fNKTBWtRG3I3I0erJkzNgL7uxKlNwcrcFKeqF" crossorigin="anonymous"></script>
+    <script rel="preconnect" src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" integrity="sha384-QuGBSgV5Im3DzL2z+8Ko9/hqNy/N0O7zwvXAtfd1MvPKWa/UbeLV65cfm4BV5Wgq" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/styles.css">
@@ -64,20 +67,28 @@
         <div id="modal" class="rounded-3 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto bg-secondary-subtle" style="width:85%;top:5%;bottom:calc(5% + 9rem);">
             <h1 class="text-center">LOD Calculator</h1>
             <div class="mt-4">
-                <p>This application allows calculation of Limits of Detection (LOD) for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
+                <p>This application allows calculation of Limits of Detection (LOD) using extra Poisson variability for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
                 <h2>Parameters</h2>
                 <p>
                     The LOD Calculator uses 4 parameters to calculate LOD:
                     <ul>
-                        <li>Coefficent of Variation (CV)</li>
-                        <li>Type II Error Rate (&beta;)</li>
-                        <li>Number of Independent Experiments (n)</li>
-                        <li>Dilution Factor (k)</li>
+                        <li><strong>Coefficent of Variation (CV)</strong> - Calculated as mean / standard deviation of the sample; defines the relative variability of the distribution</li>
+                        <li><strong>Mean (&mu;)</strong> - Mean of the sample; calculated from sample data</li>
+                        <li><strong>Standard Deviation (&sigma;)</strong> - Standard deviation of the sample; calculated from sample data</li>
+                        <li><strong>Type II Error Rate (&beta;)</strong> - Rate of false negatives desired, provided as a proportion between 0 and 1; increasing &beta; allows a higher chance of error in the resulting LOD</li>
+                        <li><strong>Number of Independent Experiments (n)</strong> - Number of experiments conducted, provided as a counting number</li>
+                        <li><strong>Dilution Factor (k)</strong> - Dilution factor used for creating the sample, provided as a percentage from 0 to 1</li>
                     </ul>
                     Each of these parameters affects the LOD calculation.
                 </p>
+                <h2>Options</h2>
+                <p>There are two options for operating the calculator:</p>
+                <ul>
+                    <li><strong>Sample / Population calulation</strong> - Toggles calculation between sample (default) and population (k=1) values</li>
+                    <li><strong>CV / Mean mode</strong> - Toggles control of CV vs &mu;/&sigma; for calculations</li>
+                </ul>
                 <h2>Operation</h2>
-                <p>The calculator supports two modes: Graph Mode and Discrete Calculation Mode:</p>
+                <p>The calculator supports two modes: Graph Mode and Discrete Calculation Mode.</p>
                 <h3>Graph Mode</h3>
                 <p>
                     Graph Mode can be accessed by selecting any of the listed parameters to be displayed as the independent variable on the graph.<br><br>
@@ -91,6 +102,11 @@
                     Discrete Calculation Mode can be accessed by selecting "Calculate Discrete Value".<br><br>
                     In this mode, any values can be input for the 4 previously mentioned parameters for an experiment.<br>
                     The last box will show the LOD value given these parameter values.
+                </p>
+                <h4>PDF Output</h4>
+                <p>
+                    Discrete Calculation Mode provides the option to export a calulated LOD as a PDF file.<br>
+                    Selecting "Download Report" in this mode will generate and download a PDF containing the current input and output values.
                 </p>
                 <small>App developed by Elliot Topper, in collaboration with David Newton and Julia Sharp at NIST Boulder.</small>
             </div>
