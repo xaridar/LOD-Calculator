@@ -14,6 +14,3 @@ def graph():
 @app.route('/calc')
 def calc():
     return render_template('index.html', render='calc')
-
-if __name__ == '__main__':
-    app.run()
