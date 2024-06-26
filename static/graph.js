@@ -19,7 +19,7 @@ const lod = (params) => {
     const { beta, n, k } = params;
     let cv;
     if (!meanMode) cv = params.cv;
-    else cv = params.mean / params.sd;
+    else cv = params.sd / params.mean;
     if (cv === 0) return -Math.log(beta) / (n * k);
     else {
         const d = 1 / Math.pow(cv, 2);
@@ -137,6 +137,9 @@ const setX = (newX) => {
     if (shortXVar) chart.options.scales.x.title.text = $(`#btn-param-${ctr.find('input').attr('id').split('-slider')[0]}`).text();
     else chart.options.scales.x.title.text = ctr.find('label').text();
 
+    // set y axis label
+    chart.options.scales.y.title.text = plated ? "LOD per plated volume" : "LOD per mL";
+
     // update chart
     chart.options.animation = false;
     chart.update();
@@ -224,8 +227,8 @@ const setPlated = (p) => {
     // save plated value to localStorage for data persistence
     localStorage.setItem('lod-plated', p);
     calcVal();
-    setX(xVar);
     plated = p;
+    setX(xVar);
 
     // if k was the current view, reset to default
     if (p && xVar === 'k') {
@@ -345,5 +348,5 @@ const genReport = () => {
 }
 
 // set switches based on persistent values
-if (localStorage.getItem('lod-plated') === "true") $('#platedSwitch').attr('checked', false).change();
+if (localStorage.getItem('lod-plated') === "true") $('#platedSwitch').attr('checked', true).change();
 $('#cvSwitch').attr('checked', localStorage.getItem('lod-mean-mode') === "true").change();

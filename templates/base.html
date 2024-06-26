@@ -67,14 +67,14 @@
         <div id="modal" class="rounded-3 py-4 px-3 px-md-5 position-absolute start-50 translate-middle-x overflow-auto bg-secondary-subtle" style="width:85%;top:5%;bottom:calc(5% + 9rem);">
             <h1 class="text-center">LOD Calculator</h1>
             <div class="mt-4">
-                <p>This application allows calculation of Limits of Detection (LOD) using extra Poisson variability for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
+                <p>This application allows calculation of Limits of Detection (LOD) of Colony Forming Units (CFUs) using extra Poisson variability for applications in microbiology. LOD calculation is performed using the statistical models presented in <a href="https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub" target="_blank">Sharp, Parker, and Hamilton (2023)</a>.</p>
                 <h2>Parameters</h2>
                 <p>
-                    The LOD Calculator uses 4 parameters to calculate LOD:
+                    The LOD Calculator uses 4 (or 5) parameters to calculate LOD:
                     <ul>
-                        <li><strong>Coefficent of Variation (CV)</strong> - Calculated as mean / standard deviation of the sample; defines the relative variability of the distribution</li>
-                        <li><strong>Mean (&mu;)</strong> - Mean of the sample; calculated from sample data</li>
-                        <li><strong>Standard Deviation (&sigma;)</strong> - Standard deviation of the sample; calculated from sample data</li>
+                        <li><strong>Coefficient of Variation (CV)</strong> - Calculated as &sigma;/&mu; of the sample; defines the relative variability of the distribution</li>
+                        <li><strong>Mean (&mu;)</strong> - Mean of the distribution of CFUs; calculated from sample data</li>
+                        <li><strong>Standard Deviation (&sigma;)</strong> - Standard Deviation of the distribution of CFUs; calculated from sample data</li>
                         <li><strong>Type II Error Rate (&beta;)</strong> - Rate of false negatives desired, provided as a proportion between 0 and 1; increasing &beta; allows a higher chance of error in the resulting LOD</li>
                         <li><strong>Number of Independent Experiments (n)</strong> - Number of experiments conducted, provided as a counting number</li>
                         <li><strong>Dilution Factor (k)</strong> - Dilution factor used for creating the sample, provided as a percentage from 0 to 1</li>
@@ -84,8 +84,8 @@
                 <h2>Options</h2>
                 <p>There are two options for operating the calculator:</p>
                 <ul>
-                    <li><strong>Sample / Population calulation</strong> - Toggles calculation between sample (default) and population (k=1) values</li>
-                    <li><strong>CV / Mean mode</strong> - Toggles control of CV vs &mu;/&sigma; for calculations</li>
+                    <li><strong>Sample / Population calculation (L<sub>original</sub> / L<sub>plate</sub>)</strong> - Toggles calculation between LOD per mL (default) and LOD per plated volume (k=1)</li>
+                    <li><strong>CV / Mean mode</strong> - Toggles control of CV vs &sigma;/&mu; for calculations</li>
                 </ul>
                 <h2>Operation</h2>
                 <p>The calculator supports two modes: Graph Mode and Discrete Calculation Mode.</p>
@@ -95,7 +95,7 @@
                     All other available parameters will become visibly accessible to be modified as desired, within a given range.<br>
                     Altering the value of any variable will dynamically update the graphical view, allowing for live updates to the graph.<br>
                     Variables can be changed via sliders with discrete values, or by entering values in the corresponding boxes.<br>
-                    The resulting graph will graph the chosen x variable against the calculated LOD per mL, with all other parameter values being statically set to those chosen values.
+                    The resulting graph will graph the chosen x variable against the calculated LOD, with all other parameter values being statically set to those chosen values.
                 </p>
                 <h3>Discrete Calculation Mode</h3>
                 <p>
@@ -105,7 +105,7 @@
                 </p>
                 <h4>PDF Output</h4>
                 <p>
-                    Discrete Calculation Mode provides the option to export a calulated LOD as a PDF file.<br>
+                    Discrete Calculation Mode provides the option to export a calculated LOD as a PDF file.<br>
                     Selecting "Download Report" in this mode will generate and download a PDF containing the current input and output values.
                 </p>
                 <small>App developed by Elliot Topper, in collaboration with David Newton and Julia Sharp at NIST Boulder.</small>
