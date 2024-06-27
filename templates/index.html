@@ -17,14 +17,14 @@
 </div>
 <div class="m-4 d-flex gap-4">
     <div class="float-end form-check form-switch">
-        <label class="form-check-label" for="platedSwitch">L<sub>original</sub></label>
+        <label class="form-check-label" for="platedSwitch">\(L_{original}\)</label>
         <input type="checkbox" id="platedSwitch" onchange="setPlated(this.checked)" data-bs-toggle="tooltip" title="Toggle calculated LOD" role="switch" class="form-check-input" style="float:none;margin-inline:0.5em">
-        <label class="form-check-label" for="platedSwitch">L<sub>plate</sub></label>
+        <label class="form-check-label" for="platedSwitch">\(L_{plate}\)</label>
     </div>
     <div class="float-end form-check form-switch">
-        <label class="form-check-label" for="cvSwitch">CV Mode</label>
+        <label class="form-check-label" for="cvSwitch">\(CV\) Mode</label>
         <input type="checkbox" id="cvSwitch" onchange="setMeanMode(this.checked)" data-bs-toggle="tooltip" title="Toggle Coefficent of Variation Input Mode" role="switch" class="form-check-input" style="float:none;margin-inline:0.5em">
-        <label class="form-check-label" for="cvSwitch">&mu;/&sigma; Mode</label>
+        <label class="form-check-label" for="cvSwitch">\(&mu;/&sigma;\) Mode</label>
     </div>
 </div>
 <div id="content" class="d-flex flex-lg-row align-items-center gap-4 container justify-content-center flex-column">
@@ -33,39 +33,40 @@
     </div>
     <div class="d-flex flex-column gap-3 w-100">
         <div class="d-grid gap-2 form-group w-100" id="cv-ctr" data-value="0" data-min="0" {{'data-max=10' if render != 'calc'}} data-step="0.1">
-            <label for="{{'cv-text' if render == 'calc' else 'cv-slider'}}" id="cv-label">Coefficient of Variation (CV)</label>
+            <label for="{{'cv-text' if render == 'calc' else 'cv-slider'}}" id="cv-label">Coefficient of Variation (\(CV\))</label>
             <input aria-labelledby="cv-label" role="slider" type="range" class="slider form-range {{'hidden' if render == 'calc'}}" id="cv-slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10">
             <input aria-label="Coefficient of Variation input" class="user-select-all text number-input form-control" onfocus="select()" id="cv-text" type="number">
         </div>
         <div class="d-flex gap-3" id="mean-sd-ctr">
             <div class="d-grid gap-2 form-group w-100" id="mean-ctr" data-value="0" data-step="0.1">
-                <label for="{{'mean-text' if render == 'calc' else 'mean-slider'}}" id="mean-label">Mean (&mu;)</label>
+                <label for="{{'mean-text' if render == 'calc' else 'mean-slider'}}" id="mean-label">Mean (\(&mu;\))</label>
                 <input aria-labelledby="mean-label" role="slider" type="range" class="slider form-range {{'hidden' if render == 'calc'}}" id="mean-slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10">
                 <input aria-label="Coefficient of Variation input" class="user-select-all text number-input form-control" onfocus="select()" id="mean-text" type="number">
             </div>
             <div class="d-grid gap-2 form-group w-100" id="sd-ctr" data-value="1" data-step="0.1">
-                <label for="{{'sd-text' if render == 'calc' else 'sd-slider'}}" id="sd-label">Standard Deviation (&sigma;)</label>
+                <label for="{{'sd-text' if render == 'calc' else 'sd-slider'}}" id="sd-label">Standard Deviation (\(&sigma;\))</label>
                 <input aria-labelledby="sd-label" role="slider" type="range" class="slider form-range {{'hidden' if render == 'calc'}}" id="sd-slider" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10">
                 <input aria-label="Coefficient of Variation input" class="user-select-all text number-input form-control" onfocus="select()" id="sd-text" type="number">
             </div>
         </div>
         <div class="d-grid gap-2 form-group w-100" id="beta-ctr" data-value="0.05" data-min="0" {{'data-max=0.5' if render != 'calc' else 'data-max=1'}} data-step="0.01">
-            <label for="{{'beta-text' if render == 'calc' else 'beta-slider'}}" id="beta-label">Type II Error Rate (&beta;)</label>
+            <label for="{{'beta-text' if render == 'calc' else 'beta-slider'}}" id="beta-label">Type II Error Rate (\(&beta;\))</label>
             <input aria-labelledby="beta-label" role="slider" type="range" class="slider form-range {{'hidden' if render == 'calc'}}" id="beta-slider" aria-valuenow="0.05" aria-valuemin="0" aria-valuemax="0.5">
             <input aria-label="Type II Error Rate input" class="user-select-all text number-input form-control" onfocus="select()" id="beta-text" type="number">
         </div>
         <div class="d-grid gap-2 form-group w-100" id="n-ctr" data-value="1" data-min="1" {{'data-max=100' if render != 'calc'}} data-step="1">
-            <label for="{{'n-text' if render == 'calc' else 'n-slider'}}" id="n-label">Number of Independent Experiments (n)</label>
+            <label for="{{'n-text' if render == 'calc' else 'n-slider'}}" id="n-label">Number of Independent Experiments (\(n\))</label>
             <input aria-labelledby="n-label" role="slider" type="range" class="slider form-range {{'hidden' if render == 'calc'}}" id="n-slider" aria-valuenow="1" aria-valuemin="1" aria-valuemax="100">
             <input aria-label="Number of Independent Experiments input" class="user-select-all text number-input form-control" onfocus="select()" id="n-text" type="number">
         </div>
         <div class="d-grid gap-2 form-group w-100" id="k-ctr" data-value="0.01" data-min="0" data-max="1" data-step="0.01">
-            <label for="{{'k-text' if render == 'calc' else 'k-slider'}}" id="k-label">Dilution Factor (k)</label>
+            <label for="{{'k-text' if render == 'calc' else 'k-slider'}}" id="k-label">Dilution Factor (\(k\))</label>
             <input aria-labelledby="k-label" role="slider" type="range" class="slider form-range {{'hidden' if render == 'calc'}}" id="k-slider" aria-valuenow="0.01" aria-valuemin="0" aria-valuemax="1">
             <input aria-label="Dilution Factor input" class="user-select-all text number-input form-control" onfocus="select()" id="k-text" type="number">
         </div>
         <div class="d-grid gap-2 form-group w-100 {{'hidden' if render != 'calc'}}" style="margin-top: 5rem" id="lod-results">
-            <label for="lod-text" class="h4">Limit of Detection (LOD) per mL</label>
+            <label id="plated-label" for="lod-text" class="h4 hidden">Limit of Detection per Plated Volume (\(L_{plate}\))</label>
+            <label id="original-label" for="lod-text" class="h4">Limit of Detection per mL (\(L_{original}\))</label>
             <input class="text form-control" id="lod-text" type="text" disabled>
             <div class="d-flex mt-3">
                 <button class="btn btn-primary m-auto" data-bs-toggle="tooltip" title="Generate and Download Report" onclick="genReport()">Download Report</button>

@@ -135,7 +135,7 @@ const setX = (newX) => {
 
     // set label text accordingly
     if (shortXVar) chart.options.scales.x.title.text = $(`#btn-param-${ctr.find('input').attr('id').split('-slider')[0]}`).text();
-    else chart.options.scales.x.title.text = ctr.find('label').text();
+    else chart.options.scales.x.title.text = ctr.find('label').text().replace(/\\[()]/g, '');
 
     // set y axis label
     chart.options.scales.y.title.text = plated ? "LOD per plated volume" : "LOD per mL";
@@ -228,6 +228,8 @@ const setPlated = (p) => {
     localStorage.setItem('lod-plated', p);
     calcVal();
     plated = p;
+    $('#lod-results label').toggleClass('hidden');
+
     setX(xVar);
 
     // if k was the current view, reset to default
