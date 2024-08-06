@@ -14,3 +14,5 @@ def graph():
 @app.route('/calc')
 def calc():
     return render_template('index.html', render='calc')
+
+app.run()
