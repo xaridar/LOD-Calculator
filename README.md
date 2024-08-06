@@ -60,3 +60,12 @@ Discrete Calculation Mode provides the option to export a calculated LOD as a PD
 Selecting "Download Report" in this mode will generate and download a PDF containing the current input and output values.
 
 ###### App developed by Elliot Topper, in collaboration with David Newton and Julia Sharp at NIST Boulder.
+
+## Acknowledgements
+
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/)
+- [Bootstrap](https://getbootstrap.com/)
+- [jQuery](https://jquery.com/)
+- [Chart.js](https://www.chartjs.org/)
+- [MathJax](https://www.mathjax.org/)
+- [pdfmake](http://pdfmake.org/#/)
