@@ -14,7 +14,7 @@ let meanMode = false;
 let plated = false;
 let formattedLOD = 0;
 
-// LOD function, as defined in Sharp, Parker, and Hamilton (2024) (https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub)
+// LOD function, as defined in Sharp, Parker, and Hamilton (2023) (https://www.sciencedirect.com/science/article/pii/S016770122300057X?via%3Dihub)
 const lod = (params) => {
     const { beta, n, k } = params;
     let cv;
